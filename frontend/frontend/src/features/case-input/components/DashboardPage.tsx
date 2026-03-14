@@ -1,9 +1,10 @@
 import { useState, type FormEvent } from 'react'
 import { analyzeCase } from '../../../api/caseAnalysis.mock'
-import type { StructuredCaseResponse, Symptom } from '../../../shared/types'
+import type { StructuredCaseResponse, Symptom, ClinicalHypothesis } from '../../../shared/types'
 import { PatientDataSection } from './PatientDataSection'
 import type { PatientDataValue } from './PatientDataSection'
 import { SymptomsSection } from './SymptomsSection'
+import { HypothesesSection } from './HypothesesSection'
 
 const TEXTAREA_PLACEHOLDER =
   'Ejemplo: Mujer de 35 años con dolor de garganta desde hace 3 días, sin fiebre, refiere irritación al tragar...'
@@ -26,6 +27,8 @@ export function DashboardPage() {
   const [patientData, setPatientData] = useState<PatientDataValue | null>(null)
   const [symptoms, setSymptoms] = useState<Symptom[]>([])
   const [selectedSymptomIds, setSelectedSymptomIds] = useState<string[]>([])
+  const [hypotheses, setHypotheses] = useState<ClinicalHypothesis[]>([])
+  const [selectedHypothesisIds, setSelectedHypothesisIds] = useState<string[]>([])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -41,6 +44,8 @@ export function DashboardPage() {
       setPatientData(toPatientDataValue(result))
       setSymptoms(result.symptoms)
       setSelectedSymptomIds(result.symptoms.length > 0 ? result.symptoms.slice(0, 2).map((s) => s.id) : [])
+      setHypotheses(result.hypotheses)
+      setSelectedHypothesisIds(result.hypotheses.length > 0 ? result.hypotheses.slice(0, 2).map((h) => h.id) : [])
     } catch {
       setError(ERROR_MESSAGE)
     } finally {
@@ -110,6 +115,20 @@ export function DashboardPage() {
                 const id = `sym-${symptoms.length + 1}`
                 setSymptoms((prev) => [...prev, { id, label }])
                 setSelectedSymptomIds((prev) => [...prev, id])
+              }}
+            />
+            <HypothesesSection
+              hypotheses={hypotheses}
+              selectedHypothesisIds={selectedHypothesisIds}
+              onToggleHypothesis={(id) => {
+                setSelectedHypothesisIds((prev) =>
+                  prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+                )
+              }}
+              onAddHypothesis={(label) => {
+                const id = `hyp-${hypotheses.length + 1}`
+                setHypotheses((prev) => [...prev, { id, label }])
+                setSelectedHypothesisIds((prev) => [...prev, id])
               }}
             />
           </section>
