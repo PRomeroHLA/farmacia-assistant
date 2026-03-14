@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { analyzeCase } from '../../../api/caseAnalysis.mock'
-import type { StructuredCaseResponse } from '../../../shared/types'
+import type { StructuredCaseResponse, Symptom } from '../../../shared/types'
 import { PatientDataSection } from './PatientDataSection'
 import type { PatientDataValue } from './PatientDataSection'
+import { SymptomsSection } from './SymptomsSection'
 
 const TEXTAREA_PLACEHOLDER =
   'Ejemplo: Mujer de 35 años con dolor de garganta desde hace 3 días, sin fiebre, refiere irritación al tragar...'
@@ -23,6 +24,8 @@ export function DashboardPage() {
   const [error, setError] = useState<string | null>(null)
   const [structuredCase, setStructuredCase] = useState<StructuredCaseResponse | null>(null)
   const [patientData, setPatientData] = useState<PatientDataValue | null>(null)
+  const [symptoms, setSymptoms] = useState<Symptom[]>([])
+  const [selectedSymptomIds, setSelectedSymptomIds] = useState<string[]>([])
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -36,6 +39,8 @@ export function DashboardPage() {
       const result = await analyzeCase(text)
       setStructuredCase(result)
       setPatientData(toPatientDataValue(result))
+      setSymptoms(result.symptoms)
+      setSelectedSymptomIds(result.symptoms.length > 0 ? result.symptoms.slice(0, 2).map((s) => s.id) : [])
     } catch {
       setError(ERROR_MESSAGE)
     } finally {
@@ -93,6 +98,20 @@ export function DashboardPage() {
               Revise y confirme los datos antes de continuar
             </p>
             <PatientDataSection value={patientData} onChange={setPatientData} />
+            <SymptomsSection
+              symptoms={symptoms}
+              selectedSymptomIds={selectedSymptomIds}
+              onToggleSymptom={(id) => {
+                setSelectedSymptomIds((prev) =>
+                  prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+                )
+              }}
+              onAddSymptom={(label) => {
+                const id = `sym-${symptoms.length + 1}`
+                setSymptoms((prev) => [...prev, { id, label }])
+                setSelectedSymptomIds((prev) => [...prev, id])
+              }}
+            />
           </section>
         )}
       </div>
