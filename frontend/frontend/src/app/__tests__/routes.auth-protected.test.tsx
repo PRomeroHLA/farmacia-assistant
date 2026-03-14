@@ -1,27 +1,18 @@
 import { describe, it, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import { MemoryRouter, Route, Routes } from 'react-router-dom'
+import { MemoryRouter } from 'react-router-dom'
 import { AuthContext, AuthProvider } from '../../context/AuthContext'
 import type { AuthContextValue } from '../../context/AuthContextValue'
-import { LoginPage } from '../../features/auth/LoginPage'
+import { AppRoutes } from '../routes'
 import { DashboardPage } from '../../features/auth/DashboardPage'
-
-function AppRoutes() {
-  return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-      </Routes>
-    </AuthProvider>
-  )
-}
 
 describe('Protected routes', () => {
   it('redirects to /login when accessing /dashboard without an authenticated user', () => {
     render(
       <MemoryRouter initialEntries={['/dashboard']}>
-        <AppRoutes />
+        <AuthProvider>
+          <AppRoutes />
+        </AuthProvider>
       </MemoryRouter>
     )
 

@@ -1,17 +1,12 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
-import { LoginPage } from './features/auth/LoginPage'
-import { DashboardPage } from './features/auth/DashboardPage'
+import { AppRoutes } from './app/routes'
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Navigate to="/login" replace />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/dashboard" element={<DashboardPage />} />
-        </Routes>
+        <AppRoutes />
       </BrowserRouter>
     </AuthProvider>
   )
