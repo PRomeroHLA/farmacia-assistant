@@ -20,3 +20,5 @@ export type {
   StructuredCaseState,
   AnalyzeCaseRequest,
 } from './clinical';
+
+export type { ProductRecommendation, GetRecommendationsFn } from './recommendations';

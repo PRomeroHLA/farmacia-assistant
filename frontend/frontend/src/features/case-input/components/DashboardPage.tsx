@@ -1,6 +1,12 @@
 import { useState, type FormEvent } from 'react'
 import { analyzeCase } from '../../../api/caseAnalysis.mock'
-import type { StructuredCaseResponse, Symptom, ClinicalHypothesis } from '../../../shared/types'
+import { getRecommendations } from '../../../api/recommendations.mock'
+import type {
+  StructuredCaseResponse,
+  Symptom,
+  ClinicalHypothesis,
+  ProductRecommendation,
+} from '../../../shared/types'
 import { PatientDataSection } from './PatientDataSection'
 import type { PatientDataValue } from './PatientDataSection'
 import { SymptomsSection } from './SymptomsSection'
@@ -10,6 +16,8 @@ const TEXTAREA_PLACEHOLDER =
   'Ejemplo: Mujer de 35 años con dolor de garganta desde hace 3 días, sin fiebre, refiere irritación al tragar...'
 const ERROR_MESSAGE =
   'No se ha podido analizar el caso. Intente de nuevo.'
+const RECOMMENDATIONS_ERROR_MESSAGE =
+  'No se han podido cargar las recomendaciones.'
 
 function toPatientDataValue(data: StructuredCaseResponse): PatientDataValue {
   return {
@@ -29,6 +37,10 @@ export function DashboardPage() {
   const [selectedSymptomIds, setSelectedSymptomIds] = useState<string[]>([])
   const [hypotheses, setHypotheses] = useState<ClinicalHypothesis[]>([])
   const [selectedHypothesisIds, setSelectedHypothesisIds] = useState<string[]>([])
+  const [confirmed, setConfirmed] = useState(false)
+  const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([])
+  const [loadingRecommendations, setLoadingRecommendations] = useState(false)
+  const [recommendationsError, setRecommendationsError] = useState<string | null>(null)
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
@@ -53,9 +65,64 @@ export function DashboardPage() {
     }
   }
 
+  const handleConfirmCase = async () => {
+    if (structuredCase === null) return
+    setConfirmed(true)
+    setLoadingRecommendations(true)
+    setRecommendationsError(null)
+    try {
+      const list = await getRecommendations(structuredCase)
+      setRecommendations(list)
+      setLoadingRecommendations(false)
+      setTimeout(() => {
+        const el = document.getElementById('recommendations')
+        if (el && typeof el.scrollIntoView === 'function') {
+          el.scrollIntoView({ behavior: 'smooth' })
+        }
+      }, 100)
+    } catch {
+      setRecommendationsError(RECOMMENDATIONS_ERROR_MESSAGE)
+      setLoadingRecommendations(false)
+    }
+  }
+
+  const handleNewCase = () => {
+    setCaseDescription('')
+    setStructuredCase(null)
+    setPatientData(null)
+    setSymptoms([])
+    setSelectedSymptomIds([])
+    setHypotheses([])
+    setSelectedHypothesisIds([])
+    setConfirmed(false)
+    setRecommendations([])
+    setLoadingRecommendations(false)
+    setRecommendationsError(null)
+    setError(null)
+    if (typeof window.scrollTo === 'function') {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-6">
-      <div className="mx-auto max-w-2xl">
+    <main className="min-h-screen bg-slate-50">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-gray-200 bg-white px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-2">
+          <div className="h-8 w-8 rounded-lg bg-emerald-500" aria-hidden />
+          <span className="text-lg font-semibold text-gray-800">Asistente de Recomendación Farmacéutica</span>
+        </div>
+        {confirmed && (
+          <button
+            type="button"
+            onClick={handleNewCase}
+            className="rounded-lg border-2 border-emerald-500 bg-white px-4 py-2 text-sm font-medium text-emerald-600 transition hover:bg-emerald-50"
+          >
+            Nuevo caso
+          </button>
+        )}
+      </header>
+
+      <div id="dashboard-content" className="mx-auto max-w-2xl px-4 py-6">
         <h1 className="text-xl font-semibold text-gray-900 mb-6">Dashboard</h1>
 
         <section className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
@@ -131,6 +198,36 @@ export function DashboardPage() {
                 setSelectedHypothesisIds((prev) => [...prev, id])
               }}
             />
+          </section>
+        )}
+
+        {structuredCase !== null && !confirmed && (
+          <div className="mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={handleConfirmCase}
+              className="bg-emerald-500 hover:bg-emerald-600 text-white px-12 py-4 rounded-xl shadow-lg hover:shadow-xl font-medium transition-colors"
+            >
+              Confirmar caso y obtener recomendaciones
+            </button>
+          </div>
+        )}
+
+        {loadingRecommendations && (
+          <p className="mt-6 text-center text-gray-600" role="status">
+            Cargando recomendaciones...
+          </p>
+        )}
+
+        {recommendationsError && (
+          <p className="mt-6 text-center text-red-600" role="alert">
+            {recommendationsError}
+          </p>
+        )}
+
+        {recommendations.length > 0 && (
+          <section id="recommendations" className="mt-8" aria-label="Recomendaciones">
+            {/* Vista de recomendaciones (tarea siguiente) */}
           </section>
         )}
       </div>
