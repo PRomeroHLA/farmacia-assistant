@@ -1,107 +1,57 @@
-import { useState, type FormEvent } from 'react'
-import { analyzeCase } from '../../../api/caseAnalysis.mock'
-import { getRecommendations } from '../../../api/recommendations.mock'
-import type {
-  StructuredCaseResponse,
-  Symptom,
-  ClinicalHypothesis,
-  ProductRecommendation,
-} from '../../../shared/types'
+import { useCaseInputState } from '../hooks/useCaseInputState'
+import { useRecommendationsState } from '../../recommendations'
 import { CaseDescriptionSection } from '../components/CaseDescriptionSection'
 import { PatientDataSection } from '../components/PatientDataSection'
-import type { PatientDataValue } from '../components/PatientDataSection'
 import { SymptomsSection } from '../components/SymptomsSection'
 import { HypothesesSection } from '../components/HypothesesSection'
 
 const TEXTAREA_PLACEHOLDER =
   'Ejemplo: Mujer de 35 años con dolor de garganta desde hace 3 días, sin fiebre, refiere irritación al tragar...'
-const ERROR_MESSAGE =
-  'No se ha podido analizar el caso. Intente de nuevo.'
-const RECOMMENDATIONS_ERROR_MESSAGE =
-  'No se han podido cargar las recomendaciones.'
-
-function toPatientDataValue(data: StructuredCaseResponse): PatientDataValue {
-  return {
-    age: data.age !== null ? String(data.age) : '',
-    sex: data.sex,
-    isPregnant: data.isPregnant,
-  }
-}
 
 export function DashboardPage() {
-  const [caseDescription, setCaseDescription] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [structuredCase, setStructuredCase] = useState<StructuredCaseResponse | null>(null)
-  const [patientData, setPatientData] = useState<PatientDataValue | null>(null)
-  const [symptoms, setSymptoms] = useState<Symptom[]>([])
-  const [selectedSymptomIds, setSelectedSymptomIds] = useState<string[]>([])
-  const [hypotheses, setHypotheses] = useState<ClinicalHypothesis[]>([])
-  const [selectedHypothesisIds, setSelectedHypothesisIds] = useState<string[]>([])
-  const [confirmed, setConfirmed] = useState(false)
-  const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([])
-  const [loadingRecommendations, setLoadingRecommendations] = useState(false)
-  const [recommendationsError, setRecommendationsError] = useState<string | null>(null)
+  const caseInput = useCaseInputState()
+  const recs = useRecommendationsState()
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-    const text = caseDescription.trim()
-    if (!text) return
+  const {
+    caseDescription,
+    setCaseDescription,
+    loadingAnalyze,
+    analyzeError,
+    structuredCase,
+    patientData,
+    setPatientData,
+    symptoms,
+    setSymptoms,
+    selectedSymptomIds,
+    setSelectedSymptomIds,
+    hypotheses,
+    setHypotheses,
+    selectedHypothesisIds,
+    setSelectedHypothesisIds,
+    handleSubmit,
+    reset: resetCaseInput,
+  } = caseInput
 
-    setLoading(true)
-    setError(null)
-
-    try {
-      const result = await analyzeCase(text)
-      setStructuredCase(result)
-      setPatientData(toPatientDataValue(result))
-      setSymptoms(result.symptoms)
-      setSelectedSymptomIds(result.symptoms.length > 0 ? result.symptoms.slice(0, 2).map((s) => s.id) : [])
-      setHypotheses(result.hypotheses)
-      setSelectedHypothesisIds(result.hypotheses.length > 0 ? result.hypotheses.slice(0, 2).map((h) => h.id) : [])
-    } catch {
-      setError(ERROR_MESSAGE)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleConfirmCase = async () => {
-    if (structuredCase === null) return
-    setConfirmed(true)
-    setLoadingRecommendations(true)
-    setRecommendationsError(null)
-    try {
-      const list = await getRecommendations(structuredCase)
-      setRecommendations(list)
-      setLoadingRecommendations(false)
-      setTimeout(() => {
-        const el = document.getElementById('recommendations')
-        if (el && typeof el.scrollIntoView === 'function') {
-          el.scrollIntoView({ behavior: 'smooth' })
-        }
-      }, 100)
-    } catch {
-      setRecommendationsError(RECOMMENDATIONS_ERROR_MESSAGE)
-      setLoadingRecommendations(false)
-    }
-  }
+  const {
+    confirmed,
+    recommendations,
+    loadingRecommendations,
+    recommendationsError,
+    confirmCase,
+    reset: resetRecommendations,
+  } = recs
 
   const handleNewCase = () => {
-    setCaseDescription('')
-    setStructuredCase(null)
-    setPatientData(null)
-    setSymptoms([])
-    setSelectedSymptomIds([])
-    setHypotheses([])
-    setSelectedHypothesisIds([])
-    setConfirmed(false)
-    setRecommendations([])
-    setLoadingRecommendations(false)
-    setRecommendationsError(null)
-    setError(null)
+    resetCaseInput()
+    resetRecommendations()
     if (typeof window.scrollTo === 'function') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  const handleConfirmCase = () => {
+    if (structuredCase !== null) {
+      confirmCase(structuredCase)
     }
   }
 
@@ -130,8 +80,8 @@ export function DashboardPage() {
           value={caseDescription}
           onChange={setCaseDescription}
           onSubmit={handleSubmit}
-          loading={loading}
-          error={error}
+          loading={loadingAnalyze}
+          error={analyzeError}
           placeholder={TEXTAREA_PLACEHOLDER}
         />
 
