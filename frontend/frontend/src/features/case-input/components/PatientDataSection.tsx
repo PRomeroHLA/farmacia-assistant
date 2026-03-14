@@ -23,14 +23,14 @@ export function PatientDataSection({ value, onChange }: PatientDataSectionProps)
   }
 
   return (
-    <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
-      <h3 className="text-base font-medium text-gray-800 mb-4">
+    <div className="bg-gray-50 rounded-lg p-6 mb-6">
+      <h3 className="text-left text-gray-800 mb-4">
         Datos del paciente
       </h3>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div>
-          <label htmlFor="patient-age" className="block text-sm text-gray-700 mb-1">
+          <label htmlFor="patient-age" className="block text-gray-700 mb-2">
             Edad
           </label>
           <input
@@ -40,13 +40,15 @@ export function PatientDataSection({ value, onChange }: PatientDataSectionProps)
             max={120}
             value={value.age}
             onChange={handleAgeChange}
-            className="w-full max-w-[8rem] px-3 py-2 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
+            className="w-full px-4 py-2 bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
             aria-label="Edad"
           />
         </div>
 
+        <div>
+          <label className="block text-gray-700 mb-3">Sexo</label>
         <fieldset>
-          <legend className="block text-sm text-gray-700 mb-2">Sexo</legend>
+          <legend className="sr-only">Sexo</legend>
           <div className="flex gap-4">
             <label className="inline-flex items-center gap-2 cursor-pointer">
               <input
@@ -55,10 +57,10 @@ export function PatientDataSection({ value, onChange }: PatientDataSectionProps)
                 value="Hombre"
                 checked={value.sex === 'Hombre'}
                 onChange={() => handleSexChange('Hombre')}
-                className="text-emerald-600 focus:ring-emerald-500"
+                className="w-4 h-4 text-emerald-500 focus:ring-emerald-500"
                 aria-label="Hombre"
               />
-              <span className="text-sm text-gray-800">Hombre</span>
+              <span>Hombre</span>
             </label>
             <label className="inline-flex items-center gap-2 cursor-pointer">
               <input
@@ -67,24 +69,26 @@ export function PatientDataSection({ value, onChange }: PatientDataSectionProps)
                 value="Mujer"
                 checked={value.sex === 'Mujer'}
                 onChange={() => handleSexChange('Mujer')}
-                className="text-emerald-600 focus:ring-emerald-500"
+                className="w-4 h-4 text-emerald-500 focus:ring-emerald-500"
                 aria-label="Mujer"
               />
               <span className="text-sm text-gray-800">Mujer</span>
             </label>
           </div>
         </fieldset>
+        </div>
 
         <div>
+          <label className="block text-gray-700 mb-3">Estado</label>
           <label className="inline-flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={value.isPregnant}
               onChange={handlePregnantChange}
-              className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+              className="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-500"
               aria-label="Embarazo"
             />
-            <span className="text-sm text-gray-800">Embarazo</span>
+            <span>Embarazo</span>
           </label>
         </div>
       </div>

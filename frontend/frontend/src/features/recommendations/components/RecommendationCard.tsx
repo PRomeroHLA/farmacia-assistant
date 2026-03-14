@@ -16,23 +16,27 @@ export const RecommendationCard: FC<RecommendationCardProps> = ({
 
   return (
     <article
-      className="rounded-xl border-2 border-gray-200 bg-white p-6 transition-colors hover:border-emerald-300"
+      className="border-2 border-gray-200 rounded-xl p-6 hover:border-emerald-300 transition-colors"
     >
-      <header className="flex items-start justify-between gap-2">
-        <h2 className="text-lg font-semibold text-gray-900">{name}</h2>
-        <span
-          className={`inline-flex shrink-0 rounded-full px-3 py-1 text-xs font-medium ${
-            isMain
-              ? 'bg-emerald-100 text-emerald-800'
-              : 'bg-sky-100 text-sky-800'
-          }`}
-        >
-          {isMain ? 'Recomendación principal' : 'Alternativa'}
-        </span>
+      <header className="flex items-start justify-between gap-2 mb-3">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-1">
+            <h2 className="text-gray-800">{name}</h2>
+            <span
+              className={`px-3 py-1 rounded-full text-xs ${
+                isMain
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-blue-100 text-blue-700'
+              }`}
+            >
+              {isMain ? 'Recomendación principal' : 'Alternativa'}
+            </span>
+          </div>
+          <p className="text-sm text-emerald-600 mb-2">{category}</p>
+        </div>
       </header>
 
-      <p className="mt-1 text-sm font-medium text-emerald-700">{category}</p>
-      <p className="mt-2 text-sm text-gray-700">{reason}</p>
+      <p className="text-gray-700 mb-4">{reason}</p>
 
       {(price != null || stock != null || format != null) && (
         <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 border-t border-gray-100 pt-4 text-sm text-gray-600">

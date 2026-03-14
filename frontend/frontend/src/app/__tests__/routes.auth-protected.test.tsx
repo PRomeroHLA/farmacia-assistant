@@ -45,7 +45,7 @@ describe('Protected routes', () => {
     )
 
     expect(
-      screen.getByRole('heading', { name: /dashboard/i })
+      screen.getByRole('heading', { name: /descripción del caso del cliente/i })
     ).toBeInTheDocument()
   })
 })
