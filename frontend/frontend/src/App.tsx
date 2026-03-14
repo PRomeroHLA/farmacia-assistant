@@ -1,26 +1,19 @@
-import { RecommendationCard } from './features/recommendations/components/RecommendationCard.tsx'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import { LoginPage } from './features/auth/LoginPage'
+import { DashboardPage } from './features/auth/DashboardPage'
 
 function App() {
-  const recommendation = {
-    id: 'test-1',
-    name: 'Spray bucofaríngeo X',
-    category: 'Antisépticos',
-    reason: 'Indicado para irritación faríngea leve',
-    isMain: true,
-  }
-
   return (
-    <main className="min-h-screen bg-slate-50 px-4 py-8">
-      <div className="mx-auto max-w-xl">
-        <RecommendationCard
-          recommendation={recommendation}
-          onSelect={(rec) => {
-            // eslint-disable-next-line no-console
-            console.log('Seleccionada recomendación de prueba', rec)
-          }}
-        />
-      </div>
-    </main>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 
