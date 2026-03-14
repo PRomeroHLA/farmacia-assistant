@@ -40,6 +40,26 @@ htmlcov/
 # Docker
 *.log
 
+# Backend (Python / FastAPI)
+backend/.venv/
+backend/venv/
+backend/.env
+backend/.env.local
+backend/.env.*.local
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/**/*.egg-info/
+backend/.eggs/
+backend/dist/
+backend/build/
+backend/.pytest_cache/
+backend/.coverage
+backend/coverage/
+backend/htmlcov/
+backend/.mypy_cache/
+backend/.ruff_cache/
+*.egg
+
 # Docs
 docs/
 

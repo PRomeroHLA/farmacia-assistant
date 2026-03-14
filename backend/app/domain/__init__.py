@@ -1,0 +1,1 @@
+# Entidades, reglas de negocio
