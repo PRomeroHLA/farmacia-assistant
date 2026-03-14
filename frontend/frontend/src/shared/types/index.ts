@@ -10,3 +10,13 @@ export type LoginResult = {
 } | null;
 
 export type LoginFn = (username: string, password: string) => Promise<LoginResult>;
+
+export type {
+  Symptom,
+  ClinicalHypothesis,
+  SymptomItem,
+  HypothesisItem,
+  StructuredCaseResponse,
+  StructuredCaseState,
+  AnalyzeCaseRequest,
+} from './clinical';
