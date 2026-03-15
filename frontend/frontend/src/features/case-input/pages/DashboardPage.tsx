@@ -1,10 +1,29 @@
+import type { StructuredCaseResponse } from '../../../shared/types'
 import { useCaseInputState } from '../hooks/useCaseInputState'
 import { useRecommendationsState } from '../../recommendations'
 import { CaseDescriptionSection } from '../components/CaseDescriptionSection'
 import { PatientDataSection } from '../components/PatientDataSection'
+import type { PatientDataValue } from '../components/PatientDataSection'
 import { SymptomsSection } from '../components/SymptomsSection'
 import { HypothesesSection } from '../components/HypothesesSection'
 import { RecommendationCard } from '../../recommendations'
+
+function buildCaseForRecommendations(
+  patientData: PatientDataValue,
+  symptoms: StructuredCaseResponse['symptoms'],
+  hypotheses: StructuredCaseResponse['hypotheses']
+): StructuredCaseResponse {
+  const ageStr = patientData.age.trim()
+  const age = ageStr === '' ? null : parseInt(ageStr, 10)
+  const ageValid = age !== null && !Number.isNaN(age) ? age : null
+  return {
+    age: ageValid,
+    sex: patientData.sex,
+    isPregnant: patientData.isPregnant,
+    symptoms,
+    hypotheses,
+  }
+}
 
 export function DashboardPage() {
   const caseInput = useCaseInputState()
@@ -48,8 +67,9 @@ export function DashboardPage() {
   }
 
   const handleConfirmCase = () => {
-    if (structuredCase !== null) {
-      confirmCase(structuredCase)
+    if (structuredCase !== null && patientData !== null) {
+      const caseData = buildCaseForRecommendations(patientData, symptoms, hypotheses)
+      confirmCase(caseData)
     }
   }
 
@@ -142,12 +162,13 @@ export function DashboardPage() {
           </section>
         )}
 
-        {structuredCase !== null && !confirmed && (
+        {structuredCase !== null && patientData !== null && (
           <section className="mb-6 flex justify-center">
             <button
               type="button"
               onClick={handleConfirmCase}
-              className="bg-emerald-500 hover:bg-emerald-600 text-white px-12 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl"
+              disabled={loadingRecommendations}
+              className="bg-emerald-500 hover:bg-emerald-600 disabled:opacity-50 disabled:cursor-not-allowed text-white px-12 py-4 rounded-xl transition-colors shadow-lg hover:shadow-xl"
             >
               Confirmar caso y obtener recomendaciones
             </button>

@@ -96,8 +96,9 @@ describe('DashboardPage – Nuevo caso', () => {
     })
     await user.click(screen.getByRole('button', { name: /confirmar caso y obtener recomendaciones/i }))
     await waitFor(() => {
-      expect(screen.queryByRole('button', { name: /confirmar caso y obtener recomendaciones/i })).not.toBeInTheDocument()
+      expect(screen.getByText(/productos recomendados/i)).toBeInTheDocument()
     })
+    expect(screen.getByRole('button', { name: /confirmar caso y obtener recomendaciones/i })).toBeInTheDocument()
 
     const nuevoCasoButton = screen.getByRole('button', { name: /nuevo caso/i })
     await user.click(nuevoCasoButton)
