@@ -1,5 +1,5 @@
 import { useState, useCallback, type FormEvent } from 'react'
-import { analyzeCase } from '../../../api/caseAnalysis.mock'
+import { analyzeCase } from '../../../api/caseAnalysis'
 import type {
   StructuredCaseResponse,
   Symptom,

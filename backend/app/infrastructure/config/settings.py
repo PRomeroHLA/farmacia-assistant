@@ -17,3 +17,6 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str | None = None
     """URL de conexión a PostgreSQL. Solo necesaria cuando STORAGE_BACKEND=postgresql."""
+
+    CORS_ORIGINS: str = "http://localhost:5173"
+    """Orígenes permitidos para CORS (separados por coma). En desarrollo el front suele estar en 5173 (Vite) y el back en 8000."""

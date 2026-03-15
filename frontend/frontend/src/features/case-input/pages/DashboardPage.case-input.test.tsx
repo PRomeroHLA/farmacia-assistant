@@ -2,9 +2,9 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DashboardPage } from './DashboardPage'
-import { analyzeCase } from '../../../api/caseAnalysis.mock'
+import { analyzeCase } from '../../../api/caseAnalysis'
 
-vi.mock('../../../api/caseAnalysis.mock', () => ({
+vi.mock('../../../api/caseAnalysis', () => ({
   analyzeCase: vi.fn(),
 }))
 
