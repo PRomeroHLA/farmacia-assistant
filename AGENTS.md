@@ -146,8 +146,8 @@ No implementar funcionalidad sin un test que la cubra (salvo configuración o an
 
 ### Organización (Clean Architecture)
 
-- **`app/domain/`** — entidades, value objects, reglas de negocio, **interfaces de repositorios** (puertos). Sin dependencias de framework ni infra.
-- **`app/application/`** — casos de uso, DTOs de aplicación, orquestación. Depende solo del dominio.
+- **`app/domain/`** — entidades, value objects, reglas de negocio, . Sin dependencias de framework ni infra.
+- **`app/application/`** — casos de uso, DTOs de aplicación, orquestación, **interfaces de repositorios** (puertos). Depende solo del dominio.
 - **`app/infrastructure/`** — persistencia (repositorios in-memory o PostgreSQL), config, seguridad, LLM, logging. Implementa los puertos del dominio.
 - **`app/interfaces/`** — API HTTP: rutas, schemas Pydantic, dependencias FastAPI. Depende de application y de las interfaces (no de implementaciones concretas).
 
