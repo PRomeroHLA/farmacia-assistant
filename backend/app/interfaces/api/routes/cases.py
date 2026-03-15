@@ -1,6 +1,6 @@
 """Rutas de análisis de caso clínico y recomendaciones."""
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from app.application.use_cases.analyze_case import AnalyzeCaseUseCase
 from app.application.use_cases.recommendations import RecommendationsUseCase
@@ -20,14 +20,25 @@ from app.interfaces.api.schemas.recommendation import (
 router = APIRouter(prefix="/cases", tags=["cases"])
 
 
+ANALYZE_ERROR_MESSAGE = "No se ha podido analizar el caso. Intente de nuevo más tarde."
+
+
 @router.post("/analyze", response_model=StructuredCaseResponse)
 def analyze_case(
     body: AnalyzeCaseRequest,
     analyze_case_use_case: AnalyzeCaseUseCase = Depends(get_analyze_case_use_case),
 ) -> StructuredCaseResponse:
     """Analiza el texto del caso y devuelve la estructura clínica (age, sex, isPregnant, symptoms, hypotheses)."""
-    structured = analyze_case_use_case.run(body.text)
-    return structured_case_to_response(structured)
+    try:
+        structured = analyze_case_use_case.run(body.text)
+        return structured_case_to_response(structured)
+    except Exception:
+        # Cualquier fallo del extractor (mock, OpenAI, red, JSON inválido): respuesta genérica.
+        # No se hace fallback a mock ni se exponen stack traces ni detalles internos.
+        raise HTTPException(
+            status_code=503,
+            detail=ANALYZE_ERROR_MESSAGE,
+        ) from None
 
 
 RECOMMENDATIONS_EXPLANATION_PLACEHOLDER = "Recomendación según el caso clínico validado."

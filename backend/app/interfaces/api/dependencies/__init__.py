@@ -7,7 +7,7 @@ from app.application.use_cases.analyze_case import AnalyzeCaseUseCase
 from app.application.use_cases.recommendations import RecommendationsUseCase
 from app.infrastructure.config import get_settings
 from app.infrastructure.config import Settings
-from app.infrastructure.llm import MockCaseStructureExtractor
+from app.infrastructure.llm.factory import get_case_structure_extractor
 from app.infrastructure.persistence.factory import (
     get_user_repository as _get_user_repository,
     get_medication_repository as _get_medication_repository,
@@ -36,9 +36,12 @@ def get_case_repository(
     return _get_case_repository(settings)
 
 
-def get_analyze_case_use_case() -> AnalyzeCaseUseCase:
-    """Inyecta AnalyzeCaseUseCase con MockCaseStructureExtractor."""
-    return AnalyzeCaseUseCase(case_structure_extractor=MockCaseStructureExtractor())
+def get_analyze_case_use_case(
+    settings: Settings = Depends(get_settings),
+) -> AnalyzeCaseUseCase:
+    """Inyecta AnalyzeCaseUseCase. El extractor se elige según settings.LLM_EXTRACTOR (mock u openai)."""
+    extractor = get_case_structure_extractor(settings)
+    return AnalyzeCaseUseCase(case_structure_extractor=extractor)
 
 
 def get_recommendations_use_case(

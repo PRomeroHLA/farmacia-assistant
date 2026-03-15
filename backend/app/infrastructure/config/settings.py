@@ -20,3 +20,13 @@ class Settings(BaseSettings):
 
     CORS_ORIGINS: str = "http://localhost:5173"
     """Orígenes permitidos para CORS (separados por coma). En desarrollo el front suele estar en 5173 (Vite) y el back en 8000."""
+
+    # OpenAI e extractor LLM (video-08)
+    OPENAI_API_KEY: str | None = None
+    """Clave de API de OpenAI. Obligatoria cuando LLM_EXTRACTOR=openai."""
+
+    OPENAI_MODEL: str = "gpt-4o-mini"
+    """Modelo de OpenAI (p. ej. gpt-4o-mini, gpt-3.5-turbo). Puede sobrescribirse por variable de entorno."""
+
+    LLM_EXTRACTOR: Literal["mock", "openai"] = "mock"
+    """Implementación de CaseStructureExtractor: 'mock' (MockCaseStructureExtractor) o 'openai' (LangChain/OpenAI). Por defecto 'mock' para que la app funcione sin OPENAI_API_KEY y los tests usen mock."""
