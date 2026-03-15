@@ -2,4 +2,15 @@
 
 from app.infrastructure.config.settings import Settings
 
-__all__ = ["Settings"]
+_settings: Settings | None = None
+
+
+def get_settings() -> Settings:
+    """Devuelve la configuración (singleton). Para uso con Depends(get_settings)."""
+    global _settings
+    if _settings is None:
+        _settings = Settings()
+    return _settings
+
+
+__all__ = ["Settings", "get_settings"]
