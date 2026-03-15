@@ -35,3 +35,14 @@ class AnalyzeCaseRequest(BaseModel):
     """Body de la petición de análisis: texto libre del caso."""
 
     text: str
+
+
+def structured_case_to_response(case: "StructuredCase") -> StructuredCaseResponse:
+    """Mapea la entidad StructuredCase al schema de API (StructuredCaseResponse)."""
+    return StructuredCaseResponse(
+        age=case.age,
+        sex=case.sex,
+        is_pregnant=case.is_pregnant,
+        symptoms=[SymptomSchema(id=s.id, label=s.label) for s in case.symptoms],
+        hypotheses=[ClinicalHypothesisSchema(id=h.id, label=h.label) for h in case.hypotheses],
+    )

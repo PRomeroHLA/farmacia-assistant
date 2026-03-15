@@ -3,5 +3,11 @@
 from app.application.ports.user_repository import UserRepository
 from app.application.ports.medication_repository import MedicationRepository
 from app.application.ports.case_repository import CaseRepository
+from app.application.ports.case_structure_extractor import CaseStructureExtractor
 
-__all__ = ["UserRepository", "MedicationRepository", "CaseRepository"]
+__all__ = [
+    "UserRepository",
+    "MedicationRepository",
+    "CaseRepository",
+    "CaseStructureExtractor",
+]

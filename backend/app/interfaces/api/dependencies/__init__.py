@@ -3,8 +3,10 @@
 from fastapi import Depends
 
 from app.application.ports import UserRepository, MedicationRepository, CaseRepository
+from app.application.use_cases.analyze_case import AnalyzeCaseUseCase
 from app.infrastructure.config import get_settings
 from app.infrastructure.config import Settings
+from app.infrastructure.llm import MockCaseStructureExtractor
 from app.infrastructure.persistence.factory import (
     get_user_repository as _get_user_repository,
     get_medication_repository as _get_medication_repository,
@@ -31,3 +33,8 @@ def get_case_repository(
 ) -> CaseRepository:
     """Inyecta CaseRepository según STORAGE_BACKEND. Uso: Depends(get_case_repository)."""
     return _get_case_repository(settings)
+
+
+def get_analyze_case_use_case() -> AnalyzeCaseUseCase:
+    """Inyecta AnalyzeCaseUseCase con MockCaseStructureExtractor."""
+    return AnalyzeCaseUseCase(case_structure_extractor=MockCaseStructureExtractor())
