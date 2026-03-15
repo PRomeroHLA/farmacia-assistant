@@ -1,17 +1,22 @@
-"""Factory de repositorios según STORAGE_BACKEND. Usar con FastAPI Depends."""
+"""Factory de repositorios según STORAGE_BACKEND. Usar con FastAPI Depends.
+
+Con STORAGE_BACKEND=memory el catálogo de medicamentos usa datos de desarrollo
+(get_default_medications). Con STORAGE_BACKEND=postgresql (video-07) se cargará desde la BD.
+"""
 
 from app.application.ports import (
     UserRepository,
     MedicationRepository,
     CaseRepository,
 )
-from app.domain.entities import User, Medication
+from app.domain.entities import User
 from app.infrastructure.config import Settings
 from app.infrastructure.persistence.memory import (
     InMemoryUserRepository,
     InMemoryMedicationRepository,
     InMemoryCaseRepository,
 )
+from app.infrastructure.persistence.memory.seed_medications import get_default_medications
 
 # Singletons en memoria (pre-cargados con datos de ejemplo)
 _memory_user_repo: InMemoryUserRepository | None = None
@@ -24,32 +29,6 @@ def _sample_users() -> list[User]:
     return [
         User(id="1", username="farmacia", full_name="Farmacia Centro"),
         User(id="2", username="admin", full_name="Administrador"),
-    ]
-
-
-def _sample_medications() -> list[Medication]:
-    """Medicamentos de ejemplo para desarrollo y pruebas."""
-    return [
-        Medication(
-            id="med-1",
-            name="Paracetamol 500 mg",
-            category="Analgésico",
-            reason="Dolor leve, fiebre",
-            badge="main",
-            price="3.50",
-            stock="100",
-            format="20 comprimidos",
-        ),
-        Medication(
-            id="med-2",
-            name="Ibuprofeno 400 mg",
-            category="Antiinflamatorio",
-            reason="Dolor, inflamación",
-            badge="alternative",
-            price="4.20",
-            stock="50",
-            format="30 comprimidos",
-        ),
     ]
 
 
@@ -73,7 +52,7 @@ def get_medication_repository(settings: Settings) -> MedicationRepository:
     if settings.STORAGE_BACKEND == "memory":
         if _memory_medication_repo is None:
             _memory_medication_repo = InMemoryMedicationRepository(
-                initial_medications=_sample_medications()
+                initial_medications=get_default_medications()
             )
         return _memory_medication_repo
     if settings.STORAGE_BACKEND == "postgresql":
