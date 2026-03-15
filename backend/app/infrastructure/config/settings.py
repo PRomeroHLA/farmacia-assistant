@@ -17,3 +17,9 @@ class Settings(BaseSettings):
 
     DATABASE_URL: str | None = None
     """URL de conexión a PostgreSQL. Solo necesaria cuando STORAGE_BACKEND=postgresql."""
+
+    JWT_SECRET_KEY: str = "change-me-in-production"
+    """Clave secreta para firmar tokens JWT. En producción usar variable de entorno."""
+
+    JWT_EXPIRE_MINUTES: int = 60
+    """Minutos hasta que expire el token JWT."""

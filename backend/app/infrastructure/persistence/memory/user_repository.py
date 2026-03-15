@@ -3,7 +3,9 @@ from app.domain.entities import User
 
 
 class InMemoryUserRepository(UserRepository):
-    """Implementación en memoria de UserRepository. Solo estructuras Python (dict)."""
+    """Implementación en memoria de UserRepository. Solo estructuras Python (dict).
+    add(user) y get_by_username/get_by_id aceptan User con o sin password_hash.
+    """
 
     def __init__(self, initial_users: list[User] | None = None) -> None:
         self._by_id: dict[str, User] = {}

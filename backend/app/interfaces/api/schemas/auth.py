@@ -2,6 +2,8 @@
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.domain.entities import User
+
 
 class LoginRequest(BaseModel):
     """Cuerpo de la petición de login."""
@@ -27,3 +29,8 @@ class LoginResponse(BaseModel):
 
     user: UserSchema
     token: str | None = None
+
+
+def user_to_schema(user: User) -> UserSchema:
+    """Mapea la entidad User al schema de API. No incluye password_hash (nunca se expone)."""
+    return UserSchema(id=user.id, username=user.username, full_name=user.full_name)
