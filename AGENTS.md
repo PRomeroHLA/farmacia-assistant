@@ -182,17 +182,17 @@ Desde la raíz **`backend/`**:
 
 ### Plan de desarrollo (entregables)
 
-El plan detallado está en **`docs/back/Plan Back Ph/`**. Resumen:
+El plan detallado está en **`docs/back/Plan Back Ph/`**. Los videos 04, 05 y 06 usan **persistencia en memoria**; cada uno indica cómo cambiar a PostgreSQL tras el video 07. Resumen:
 
 | Tarea | Contenido principal |
 | ----- | ------------------- |
 | 01 | Setup: FastAPI, pytest, Clean Architecture, persistencia en memoria, health |
-| 02 | Dominio y DTOs (entidades, interfaces de repositorios) |
+| 02 | Dominio y DTOs (entidades, interfaces de repositorios, repos in-memory) |
 | 03 | Auth: login, hash, token/sesión |
-| 04 | PostgreSQL: SQLAlchemy, modelos, migraciones, repositorios |
-| 05 | Análisis de caso (endpoint, mock LLM) |
-| 06 | Motor de recomendaciones (catálogo, stock, reglas) |
-| 07 | Endpoint recomendaciones (principal + alternativas + explicación) |
+| 04 | Análisis de caso (endpoint, mock LLM); en memoria → indicar paso a Postgres (video 07) |
+| 05 | Motor de recomendaciones (catálogo, stock, reglas); en memoria → indicar paso a Postgres (video 07) |
+| 06 | Endpoint recomendaciones (principal + alternativas + explicación); en memoria → indicar paso a Postgres (video 07) |
+| 07 | Base de datos: PostgreSQL, SQLAlchemy, modelos, migraciones, Postgres*Repository |
 | 08 | Integración LLM real |
 | 09 | Calidad: ruff, mypy, scripts |
 
