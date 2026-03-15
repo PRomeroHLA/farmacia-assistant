@@ -4,6 +4,7 @@ from fastapi import Depends
 
 from app.application.ports import UserRepository, MedicationRepository, CaseRepository
 from app.application.use_cases.analyze_case import AnalyzeCaseUseCase
+from app.application.use_cases.recommendations import RecommendationsUseCase
 from app.infrastructure.config import get_settings
 from app.infrastructure.config import Settings
 from app.infrastructure.llm import MockCaseStructureExtractor
@@ -38,3 +39,10 @@ def get_case_repository(
 def get_analyze_case_use_case() -> AnalyzeCaseUseCase:
     """Inyecta AnalyzeCaseUseCase con MockCaseStructureExtractor."""
     return AnalyzeCaseUseCase(case_structure_extractor=MockCaseStructureExtractor())
+
+
+def get_recommendations_use_case(
+    medication_repository: MedicationRepository = Depends(get_medication_repository),
+) -> RecommendationsUseCase:
+    """Inyecta RecommendationsUseCase. MedicationRepository se obtiene con get_medication_repository."""
+    return RecommendationsUseCase(medication_repository=medication_repository)

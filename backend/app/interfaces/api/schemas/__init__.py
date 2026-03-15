@@ -6,8 +6,13 @@ from app.interfaces.api.schemas.case import (
     ClinicalHypothesisSchema,
     StructuredCaseResponse,
     AnalyzeCaseRequest,
+    request_body_to_structured_case,
 )
-from app.interfaces.api.schemas.recommendation import ProductRecommendation
+from app.interfaces.api.schemas.recommendation import (
+    ProductRecommendation,
+    RecommendationsResponse,
+    medication_to_product_recommendation,
+)
 
 __all__ = [
     "LoginRequest",
@@ -17,5 +22,8 @@ __all__ = [
     "ClinicalHypothesisSchema",
     "StructuredCaseResponse",
     "AnalyzeCaseRequest",
+    "request_body_to_structured_case",
     "ProductRecommendation",
+    "RecommendationsResponse",
+    "medication_to_product_recommendation",
 ]

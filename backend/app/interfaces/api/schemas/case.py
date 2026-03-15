@@ -4,6 +4,8 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.domain.entities import ClinicalHypothesis, StructuredCase, Symptom
+
 
 class SymptomSchema(BaseModel):
     """Síntoma detectado. Mismo formato que frontend Symptom."""
@@ -37,7 +39,7 @@ class AnalyzeCaseRequest(BaseModel):
     text: str
 
 
-def structured_case_to_response(case: "StructuredCase") -> StructuredCaseResponse:
+def structured_case_to_response(case: StructuredCase) -> StructuredCaseResponse:
     """Mapea la entidad StructuredCase al schema de API (StructuredCaseResponse)."""
     return StructuredCaseResponse(
         age=case.age,
@@ -45,4 +47,17 @@ def structured_case_to_response(case: "StructuredCase") -> StructuredCaseRespons
         is_pregnant=case.is_pregnant,
         symptoms=[SymptomSchema(id=s.id, label=s.label) for s in case.symptoms],
         hypotheses=[ClinicalHypothesisSchema(id=h.id, label=h.label) for h in case.hypotheses],
+    )
+
+
+def request_body_to_structured_case(body: StructuredCaseResponse) -> StructuredCase:
+    """Convierte el body de la petición (caso confirmado) a la entidad StructuredCase.
+    El body tiene la misma estructura que StructuredCaseResponse (age, sex, isPregnant, symptoms, hypotheses).
+    """
+    return StructuredCase(
+        age=body.age,
+        sex=body.sex,
+        is_pregnant=body.is_pregnant,
+        symptoms=[Symptom(id=s.id, label=s.label) for s in body.symptoms],
+        hypotheses=[ClinicalHypothesis(id=h.id, label=h.label) for h in body.hypotheses],
     )
