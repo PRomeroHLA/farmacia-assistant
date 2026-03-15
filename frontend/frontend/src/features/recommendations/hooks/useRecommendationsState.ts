@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { getRecommendations } from '../../../api/recommendations.mock'
+import { getRecommendations } from '../../../api/recommendations'
 import type { StructuredCaseResponse, ProductRecommendation } from '../../../shared/types'
 
 const RECOMMENDATIONS_ERROR_MESSAGE =

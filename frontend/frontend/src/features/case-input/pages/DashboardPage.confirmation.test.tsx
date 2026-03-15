@@ -3,12 +3,12 @@ import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { DashboardPage } from './DashboardPage'
 import { analyzeCase } from '../../../api/caseAnalysis'
-import { getRecommendations } from '../../../api/recommendations.mock'
+import { getRecommendations } from '../../../api/recommendations'
 
 vi.mock('../../../api/caseAnalysis', () => ({
   analyzeCase: vi.fn(),
 }))
-vi.mock('../../../api/recommendations.mock', () => ({
+vi.mock('../../../api/recommendations', () => ({
   getRecommendations: vi.fn(),
 }))
 

@@ -47,9 +47,9 @@ def get_default_medications() -> list[Medication]:
             age_max=120,
             allowed_sexes=(),
             suitable_for_pregnancy=False,
-            indicated_symptom_labels=("Dolor de garganta", "Fiebre leve"),
+            indicated_symptom_labels=("Dolor de garganta", "Fiebre leve", "inflamación"),
             indicated_hypothesis_labels=("Faringitis leve",),
-            economic_margin=Decimal("2.00"),
+            economic_margin=Decimal("50.00"),
         ),
         Medication(
             id="med-3",

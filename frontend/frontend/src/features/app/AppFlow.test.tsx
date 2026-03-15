@@ -1,14 +1,31 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { AuthProvider } from '../../context/AuthContext'
 import { AppRoutes } from '../../app/routes'
 
+vi.mock('../../api/caseAnalysis', () => ({
+  analyzeCase: vi.fn().mockResolvedValue({
+    age: 35,
+    sex: 'Mujer' as const,
+    isPregnant: false,
+    symptoms: [{ id: 'sym-1', label: 'Dolor de garganta' }],
+    hypotheses: [{ id: 'hyp-1', label: 'Faringitis leve' }],
+  }),
+}))
+
+vi.mock('../../api/recommendations', () => ({
+  getRecommendations: vi.fn().mockResolvedValue([
+    { id: '1', name: 'Producto A', category: 'Cat', reason: 'Razón', badge: 'main' as const },
+    { id: '2', name: 'Producto B', category: 'Cat', reason: 'Razón', badge: 'alternative' as const },
+  ]),
+}))
+
 /**
  * Test de integración de alto nivel: flujo completo desde login
  * hasta visualización de productos recomendados y "Nuevo caso".
- * Usa los mocks ya definidos (auth, analyzeCase, getRecommendations).
+ * Mockea caseAnalysis y getRecommendations para no depender de env ni red.
  */
 function renderApp(initialRoute = '/login') {
   return render(
