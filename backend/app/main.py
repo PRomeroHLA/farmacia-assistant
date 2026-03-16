@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.interfaces.api.routes.auth import router as auth_router
 from app.infrastructure.config import get_settings
 from app.interfaces.api.routes.cases import router as cases_router
 from app.interfaces.api.routes.routers import router as api_router
@@ -21,4 +22,5 @@ app.add_middleware(
 )
 
 app.include_router(api_router)
+app.include_router(auth_router)
 app.include_router(cases_router)

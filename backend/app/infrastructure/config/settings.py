@@ -18,6 +18,12 @@ class Settings(BaseSettings):
     DATABASE_URL: str | None = None
     """URL de conexión a PostgreSQL. Solo necesaria cuando STORAGE_BACKEND=postgresql."""
 
+    JWT_SECRET_KEY: str = "change-me-in-production"
+    """Clave secreta para firmar tokens JWT. En producción usar variable de entorno."""
+
+    JWT_EXPIRE_MINUTES: int = 60
+    """Minutos hasta que expire el token JWT."""
+
     CORS_ORIGINS: str = "http://localhost:5173"
     """Orígenes permitidos para CORS (separados por coma). En desarrollo el front suele estar en 5173 (Vite) y el back en 8000."""
 

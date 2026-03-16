@@ -1,5 +1,11 @@
 """Factory de repositorios según STORAGE_BACKEND. Usar con FastAPI Depends.
 
+Usuario de prueba para login (solo STORAGE_BACKEND=memory):
+  username: test
+  contraseña: test123
+
+Factory de repositorios según STORAGE_BACKEND. Usar con FastAPI Depends.
+
 Con STORAGE_BACKEND=memory el catálogo de medicamentos usa datos de desarrollo
 (get_default_medications). Con STORAGE_BACKEND=postgresql (video-07) se cargará desde la BD.
 """
@@ -16,6 +22,7 @@ from app.infrastructure.persistence.memory import (
     InMemoryMedicationRepository,
     InMemoryCaseRepository,
 )
+from app.infrastructure.security.password import hash_password
 from app.infrastructure.persistence.memory.seed_medications import get_default_medications
 
 # Singletons en memoria (pre-cargados con datos de ejemplo)
@@ -25,10 +32,19 @@ _memory_case_repo: InMemoryCaseRepository | None = None
 
 
 def _sample_users() -> list[User]:
-    """Datos de ejemplo para desarrollo y pruebas."""
+    """Datos de ejemplo para desarrollo y pruebas. Incluye usuario de prueba para login.
+    Usuario con password_hash real: username 'test', contraseña 'test123'.
+    """
+    test_password_hash = hash_password("test123")
     return [
-        User(id="1", username="farmacia", full_name="Farmacia Centro"),
-        User(id="2", username="admin", full_name="Administrador"),
+        User(id="1", username="farmacia", full_name="Farmacia Centro", password_hash=None),
+        User(id="2", username="admin", full_name="Administrador", password_hash=None),
+        User(
+            id="test-1",
+            username="test",
+            full_name="Usuario de prueba",
+            password_hash=test_password_hash,
+        ),
     ]
 
 
