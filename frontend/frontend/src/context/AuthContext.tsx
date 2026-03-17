@@ -1,7 +1,7 @@
 import { createContext, useState, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import type { AuthContextValue } from './AuthContextValue'
-import { login as mockLogin } from '../api/auth.mock'
+import { login as authLogin } from '../api/auth'
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
 
@@ -19,7 +19,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setLoading(true)
       setError(null)
 
-      const result = await mockLogin(username, password)
+      const result = await authLogin(username, password)
 
       if (result && result.user) {
         setUser(result.user)
