@@ -13,10 +13,16 @@ class Settings(BaseSettings):
     )
 
     STORAGE_BACKEND: Literal["memory", "postgresql"] = "memory"
-    """Modo de persistencia: "memory" (por defecto) o "postgresql"."""
+    """Modo de persistencia:
+    - "memory" (por defecto): no se abre conexión a PostgreSQL y DATABASE_URL puede ser None.
+    - "postgresql": se usará PostgreSQL (async) y DATABASE_URL debe estar definida.
+    """
 
     DATABASE_URL: str | None = None
-    """URL de conexión a PostgreSQL. Solo necesaria cuando STORAGE_BACKEND=postgresql."""
+    """URL de conexión a PostgreSQL (solo cuando STORAGE_BACKEND="postgresql").
+    Formato recomendado (driver asyncpg):
+      postgresql+asyncpg://user:password@localhost:5432/farmacia_db
+    """
 
     JWT_SECRET_KEY: str = "change-me-in-production"
     """Clave secreta para firmar tokens JWT. En producción usar variable de entorno."""

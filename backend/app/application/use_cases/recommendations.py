@@ -19,9 +19,9 @@ class RecommendationsUseCase:
     ) -> None:
         self.medication_repository = medication_repository
 
-    def run(self, case: StructuredCase) -> list[Medication]:
+    async def run(self, case: StructuredCase) -> list[Medication]:
         """Devuelve hasta 5 medicamentos que coinciden con el caso, ordenados por margen (desc); el primero con badge 'main', el resto 'alternative'."""
-        candidates = self.medication_repository.get_available()
+        candidates = await self.medication_repository.get_available()
         matching = [m for m in candidates if medication_matches_case(m, case)]
         sorted_meds = sorted(
             matching,

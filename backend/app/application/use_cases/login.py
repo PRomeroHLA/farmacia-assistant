@@ -26,9 +26,9 @@ class LoginUseCase:
         self.password_hasher = password_hasher
         self.token_service = token_service
 
-    def run(self, username: str, password: str) -> tuple[User, str]:
+    async def run(self, username: str, password: str) -> tuple[User, str]:
         """Ejecuta el login. Devuelve (user, token) o lanza InvalidCredentialsError."""
-        user = self.user_repository.get_by_username(username)
+        user = await self.user_repository.get_by_username(username)
         if user is None:
             raise InvalidCredentialsError()
 

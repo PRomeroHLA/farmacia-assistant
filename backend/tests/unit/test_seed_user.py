@@ -1,11 +1,14 @@
 """Verifica que el usuario de prueba para login existe y el hash es válido."""
 
+import pytest
+
 from app.domain.entities import User
 from app.infrastructure.persistence.memory import InMemoryUserRepository
 from app.infrastructure.security.password import hash_password, verify_password
 
 
-def test_seed_user_stored_with_password_hash():
+@pytest.mark.asyncio
+async def test_seed_user_stored_with_password_hash():
     """InMemoryUserRepository almacena User con password_hash; get_by_username lo devuelve."""
     test_hash = hash_password("test123")
     repo = InMemoryUserRepository(
@@ -13,7 +16,7 @@ def test_seed_user_stored_with_password_hash():
             User(id="test-1", username="test", full_name="Usuario de prueba", password_hash=test_hash),
         ]
     )
-    user = repo.get_by_username("test")
+    user = await repo.get_by_username("test")
     assert user is not None
     assert user.username == "test"
     assert user.password_hash is not None

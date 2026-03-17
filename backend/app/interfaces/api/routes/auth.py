@@ -10,13 +10,13 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 
 @router.post("/login", response_model=LoginResponse)
-def login(
+async def login(
     body: LoginRequest,
     login_use_case: LoginUseCase = Depends(get_login_use_case),
 ) -> LoginResponse:
     """Login con username y password. Devuelve user y token JWT o 401."""
     try:
-        user, token = login_use_case.run(username=body.username, password=body.password)
+        user, token = await login_use_case.run(username=body.username, password=body.password)
         return LoginResponse(user=user_to_schema(user), token=token)
     except InvalidCredentialsError:
         raise HTTPException(status_code=401, detail="Credenciales inválidas")

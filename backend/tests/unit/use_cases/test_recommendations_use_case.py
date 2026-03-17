@@ -2,6 +2,8 @@
 
 from decimal import Decimal
 
+import pytest
+
 from app.domain.entities import (
     ClinicalHypothesis,
     Medication,
@@ -50,7 +52,8 @@ def _med(
     return Medication(id=id, **defaults)
 
 
-def test_returns_matching_medications_sorted_by_margin_main_and_alternatives():
+@pytest.mark.asyncio
+async def test_returns_matching_medications_sorted_by_margin_main_and_alternatives():
     """Dado un caso y repo con varios medicamentos (con stock, algunos coinciden), devuelve solo los que pasan reglas, ordenados por economic_margin desc, máx 5; primero 'main', resto 'alternative'."""
     med_low = _med("m1", economic_margin=Decimal("1.0"))
     med_high = _med("m2", economic_margin=Decimal("3.0"))
@@ -61,7 +64,7 @@ def test_returns_matching_medications_sorted_by_margin_main_and_alternatives():
     use_case = RecommendationsUseCase(medication_repository=repo)
     case = _case()
 
-    result = use_case.run(case)
+    result = await use_case.run(case)
 
     assert len(result) == 3
     assert result[0].badge == "main"
@@ -73,19 +76,21 @@ def test_returns_matching_medications_sorted_by_margin_main_and_alternatives():
     assert result[2].id == "m1"
 
 
-def test_returns_empty_when_no_medication_matches():
+@pytest.mark.asyncio
+async def test_returns_empty_when_no_medication_matches():
     """Si ningún medicamento coincide con el caso, devuelve lista vacía."""
     med = _med(indicated_symptom_labels=("Otro",), indicated_hypothesis_labels=("Otra hipótesis",))
     repo = InMemoryMedicationRepository([med])
     use_case = RecommendationsUseCase(medication_repository=repo)
     case = _case()
 
-    result = use_case.run(case)
+    result = await use_case.run(case)
 
     assert result == []
 
 
-def test_only_considers_available_medications_with_stock():
+@pytest.mark.asyncio
+async def test_only_considers_available_medications_with_stock():
     """Solo se consideran medicamentos con stock (get_available()); uno sin stock no aparece aunque coincida."""
     med_with_stock = _med("m1", stock="5")
     med_no_stock = _med("m2", stock="0")
@@ -93,7 +98,7 @@ def test_only_considers_available_medications_with_stock():
     use_case = RecommendationsUseCase(medication_repository=repo)
     case = _case()
 
-    result = use_case.run(case)
+    result = await use_case.run(case)
 
     assert len(result) == 1
     assert result[0].id == "m1"

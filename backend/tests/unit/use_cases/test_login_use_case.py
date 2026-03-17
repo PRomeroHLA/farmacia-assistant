@@ -1,7 +1,7 @@
 """Tests unitarios para el caso de uso de login (TDD). Solo puertos inyectados (mocks)."""
 
 import pytest
-from unittest.mock import Mock
+from unittest.mock import AsyncMock, Mock
 
 from app.domain.entities import User
 from app.application.use_cases.login import LoginUseCase, InvalidCredentialsError
@@ -9,8 +9,8 @@ from app.application.use_cases.login import LoginUseCase, InvalidCredentialsErro
 
 @pytest.fixture
 def user_repo():
-    """Mock de UserRepository."""
-    return Mock()
+    """Mock de UserRepository (async)."""
+    return AsyncMock()
 
 
 @pytest.fixture
@@ -46,19 +46,21 @@ def sample_user():
     )
 
 
-def test_login_fails_when_user_does_not_exist(login_use_case, user_repo):
+@pytest.mark.asyncio
+async def test_login_fails_when_user_does_not_exist(login_use_case, user_repo):
     """Cuando get_by_username devuelve None, el caso de uso debe indicar error."""
     user_repo.get_by_username.return_value = None
 
     with pytest.raises(InvalidCredentialsError):
-        login_use_case.run(username="unknown", password="any")
+        await login_use_case.run(username="unknown", password="any")
 
     user_repo.get_by_username.assert_called_once_with("unknown")
     login_use_case.password_hasher.verify_password.assert_not_called()
     login_use_case.token_service.create_token.assert_not_called()
 
 
-def test_login_fails_when_password_is_incorrect(
+@pytest.mark.asyncio
+async def test_login_fails_when_password_is_incorrect(
     login_use_case, user_repo, password_hasher, sample_user
 ):
     """Cuando el usuario existe pero verify_password devuelve False, debe indicar error."""
@@ -66,14 +68,15 @@ def test_login_fails_when_password_is_incorrect(
     password_hasher.verify_password.return_value = False
 
     with pytest.raises(InvalidCredentialsError):
-        login_use_case.run(username="test", password="wrong")
+        await login_use_case.run(username="test", password="wrong")
 
     user_repo.get_by_username.assert_called_once_with("test")
     password_hasher.verify_password.assert_called_once_with("wrong", sample_user.password_hash)
     login_use_case.token_service.create_token.assert_not_called()
 
 
-def test_login_returns_user_and_token_when_credentials_valid(
+@pytest.mark.asyncio
+async def test_login_returns_user_and_token_when_credentials_valid(
     login_use_case, user_repo, password_hasher, token_service, sample_user
 ):
     """Cuando el usuario existe y la contraseña es correcta: devolver (User, token)."""
@@ -81,7 +84,7 @@ def test_login_returns_user_and_token_when_credentials_valid(
     password_hasher.verify_password.return_value = True
     token_service.create_token.return_value = "jwt-token-123"
 
-    user, token = login_use_case.run(username="test", password="test123")
+    user, token = await login_use_case.run(username="test", password="test123")
 
     assert user is sample_user
     assert token == "jwt-token-123"

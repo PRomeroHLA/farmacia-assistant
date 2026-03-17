@@ -22,6 +22,11 @@ from app.infrastructure.persistence.memory import (
     InMemoryMedicationRepository,
     InMemoryCaseRepository,
 )
+from app.infrastructure.persistence.models.engine import get_async_engine, get_async_session_maker
+from app.infrastructure.persistence.postgres import (
+    PostgresMedicationRepository,
+    PostgresUserRepository,
+)
 from app.infrastructure.security.password import hash_password
 from app.infrastructure.persistence.memory.seed_medications import get_default_medications
 
@@ -29,6 +34,26 @@ from app.infrastructure.persistence.memory.seed_medications import get_default_m
 _memory_user_repo: InMemoryUserRepository | None = None
 _memory_medication_repo: InMemoryMedicationRepository | None = None
 _memory_case_repo: InMemoryCaseRepository | None = None
+
+# Singletons PostgreSQL (engine/sessionmaker + repos)
+_pg_engine = None
+_pg_session_maker = None
+_pg_user_repo: PostgresUserRepository | None = None
+_pg_medication_repo: PostgresMedicationRepository | None = None
+
+
+def _get_pg_session_maker(settings: Settings):
+    """Crea/reutiliza engine y sessionmaker async para PostgreSQL."""
+    global _pg_engine, _pg_session_maker
+    if settings.DATABASE_URL is None or settings.DATABASE_URL.strip() == "":
+        raise ValueError(
+            'DATABASE_URL es obligatoria cuando STORAGE_BACKEND="postgresql" '
+            '(ej. postgresql+asyncpg://user:password@localhost:5432/farmacia_db)'
+        )
+    if _pg_engine is None or _pg_session_maker is None:
+        _pg_engine = get_async_engine(settings.DATABASE_URL)
+        _pg_session_maker = get_async_session_maker(_pg_engine)
+    return _pg_session_maker
 
 
 def _sample_users() -> list[User]:
@@ -56,9 +81,11 @@ def get_user_repository(settings: Settings) -> UserRepository:
             _memory_user_repo = InMemoryUserRepository(initial_users=_sample_users())
         return _memory_user_repo
     if settings.STORAGE_BACKEND == "postgresql":
-        raise NotImplementedError(
-            "PostgreSQL UserRepository se implementará en video-04 (modelos y migraciones)."
-        )
+        global _pg_user_repo
+        if _pg_user_repo is None:
+            session_maker = _get_pg_session_maker(settings)
+            _pg_user_repo = PostgresUserRepository(session_maker)
+        return _pg_user_repo
     raise ValueError(f"STORAGE_BACKEND no soportado: {settings.STORAGE_BACKEND}")
 
 
@@ -72,9 +99,11 @@ def get_medication_repository(settings: Settings) -> MedicationRepository:
             )
         return _memory_medication_repo
     if settings.STORAGE_BACKEND == "postgresql":
-        raise NotImplementedError(
-            "PostgreSQL MedicationRepository se implementará en video-04."
-        )
+        global _pg_medication_repo
+        if _pg_medication_repo is None:
+            session_maker = _get_pg_session_maker(settings)
+            _pg_medication_repo = PostgresMedicationRepository(session_maker)
+        return _pg_medication_repo
     raise ValueError(f"STORAGE_BACKEND no soportado: {settings.STORAGE_BACKEND}")
 
 

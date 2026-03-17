@@ -45,13 +45,13 @@ RECOMMENDATIONS_EXPLANATION_PLACEHOLDER = "Recomendación según el caso clínic
 
 
 @router.post("/recommendations", response_model=RecommendationsResponse)
-def get_recommendations(
+async def get_recommendations(
     body: StructuredCaseResponse,
     recommendations_use_case: RecommendationsUseCase = Depends(get_recommendations_use_case),
 ) -> RecommendationsResponse:
     """Recibe el caso clínico confirmado y devuelve recomendaciones (lista + explicación). La explicación es fija por ahora (video-08: LLM)."""
     case = request_body_to_structured_case(body)
-    medications = recommendations_use_case.run(case)
+    medications = await recommendations_use_case.run(case)
     recommendations = [medication_to_product_recommendation(m) for m in medications]
     return RecommendationsResponse(
         recommendations=recommendations,

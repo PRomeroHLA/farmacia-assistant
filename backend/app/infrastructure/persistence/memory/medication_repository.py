@@ -10,13 +10,13 @@ class InMemoryMedicationRepository(MedicationRepository):
         for med in initial_medications or []:
             self._by_id[med.id] = med
 
-    def get_all(self) -> list[Medication]:
+    async def get_all(self) -> list[Medication]:
         return list(self._by_id.values())
 
-    def get_by_id(self, id: str) -> Medication | None:
+    async def get_by_id(self, id: str) -> Medication | None:
         return self._by_id.get(id)
 
-    def get_available(self) -> list[Medication]:
+    async def get_available(self) -> list[Medication]:
         """Devuelve medicamentos con stock (stock no None y distinto de '0'). Sin stock info se consideran disponibles."""
         return [
             m for m in self._by_id.values()

@@ -7,16 +7,16 @@ class MedicationRepository(ABC):
     """Puerto para acceso al catálogo de medicamentos. Las implementaciones pueden ser InMemory o Postgres."""
 
     @abstractmethod
-    def get_all(self) -> list[Medication]:
+    async def get_all(self) -> list[Medication]:
         """Devuelve todos los medicamentos del catálogo."""
         ...
 
     @abstractmethod
-    def get_by_id(self, id: str) -> Medication | None:
+    async def get_by_id(self, id: str) -> Medication | None:
         """Obtiene un medicamento por id."""
         ...
 
     @abstractmethod
-    def get_available(self) -> list[Medication]:
+    async def get_available(self) -> list[Medication]:
         """Devuelve los medicamentos con stock disponible (o todos si no se filtra por stock)."""
         ...
