@@ -43,6 +43,13 @@ class Settings(BaseSettings):
     LLM_EXTRACTOR: Literal["mock", "openai"] = "mock"
     """Implementación de CaseStructureExtractor: 'mock' (MockCaseStructureExtractor) o 'openai' (LangChain/OpenAI). Por defecto 'mock' para que la app funcione sin OPENAI_API_KEY y los tests usen mock."""
 
+    MEDS_SEED_LIMIT: int | None = None
+    """Límite de medicamentos a sembrar en PostgreSQL.
+
+    - `None` (por defecto): se cargan todos los medicamentos del seed.
+    - `N > 0`: se cargan como máximo `N` medicamentos.
+    """
+
     def model_post_init(self, __context) -> None:  # type: ignore[override]
         # If an OpenAI key is provided and extractor wasn't explicitly switched,
         # default to OpenAI so Docker/production behaves as expected.

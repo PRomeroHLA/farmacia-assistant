@@ -26,6 +26,24 @@ from app.infrastructure.persistence.models.user import UserModel
 from app.infrastructure.security.password import hash_password
 
 
+def _get_meds_to_seed(settings: Settings) -> list:
+    """Devuelve los medicamentos a sembrar según configuración.
+
+    Por defecto (MEDS_SEED_LIMIT=None) carga todos los medicamentos del seed.
+    """
+    meds = get_default_medications()
+    limit = getattr(settings, "MEDS_SEED_LIMIT", None)
+    if limit is None:
+        return meds
+    try:
+        limit_int = int(limit)
+    except (TypeError, ValueError):
+        return meds
+    if limit_int <= 0:
+        return []
+    return meds[:limit_int]
+
+
 def _join_csv(values: tuple[str, ...]) -> str:
     return ",".join(v.strip() for v in values if v and v.strip())
 
@@ -81,8 +99,8 @@ async def seed_db(settings: Settings) -> None:
                     )
                 )
 
-            # --- Medicamentos + stock (cargamos un subset del seed en memoria) ---
-            meds = get_default_medications()[:30]
+            # --- Medicamentos + stock (seed desde catálogo en memoria) ---
+            meds = _get_meds_to_seed(settings)
             for m in meds:
                 existing_med = await session.execute(
                     select(MedicationModel).where(MedicationModel.id == m.id).limit(1)
