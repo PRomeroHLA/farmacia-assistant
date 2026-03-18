@@ -42,3 +42,9 @@ class Settings(BaseSettings):
 
     LLM_EXTRACTOR: Literal["mock", "openai"] = "mock"
     """Implementación de CaseStructureExtractor: 'mock' (MockCaseStructureExtractor) o 'openai' (LangChain/OpenAI). Por defecto 'mock' para que la app funcione sin OPENAI_API_KEY y los tests usen mock."""
+
+    def model_post_init(self, __context) -> None:  # type: ignore[override]
+        # If an OpenAI key is provided and extractor wasn't explicitly switched,
+        # default to OpenAI so Docker/production behaves as expected.
+        if self.LLM_EXTRACTOR == "mock" and self.OPENAI_API_KEY and self.OPENAI_API_KEY.strip():
+            self.LLM_EXTRACTOR = "openai"

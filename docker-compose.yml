@@ -1,31 +1,50 @@
 version: "3.8"
 
 services:
-  # backend:
-  #   build: ./backend
-  #   ports:
-  #     - "8000:8000"
-  #   env_file: .env
-  #   depends_on:
-  #     - db
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: farmacia
+      POSTGRES_PASSWORD: farmacia_password
+      POSTGRES_DB: farmacia_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U farmacia -d farmacia_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:80"
-  #   depends_on:
-  #     - backend
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      STORAGE_BACKEND: postgresql
+      DATABASE_URL: postgresql+asyncpg://farmacia:farmacia_password@db:5432/farmacia_db
+      CORS_ORIGINS: http://localhost:5173,http://localhost
+      JWT_SECRET_KEY: dev-secret-change-me
+      # LLM / OpenAI (si OPENAI_API_KEY está presente, el backend usará OpenAI por defecto)
+      # Puedes forzar mock con: LLM_EXTRACTOR=mock
+      LLM_EXTRACTOR: ${LLM_EXTRACTOR:-mock}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_MODEL: ${OPENAI_MODEL:-gpt-4o-mini}
+    depends_on:
+      db:
+        condition: service_healthy
 
-  # db:
-  #   image: postgres:16-alpine
-  #   environment:
-  #     POSTGRES_USER: user
-  #     POSTGRES_PASSWORD: password
-  #     POSTGRES_DB: farmacia
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
+  frontend:
+    build:
+      context: ./frontend/frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:
