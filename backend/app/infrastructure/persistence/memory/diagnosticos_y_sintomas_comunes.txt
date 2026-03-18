@@ -1,0 +1,308 @@
+100 diagnósticos comunes (lista orientativa, no exhaustiva)
+==========================================================
+
+01. Hipertensión arterial
+02. Diabetes mellitus tipo 2
+03. Dislipidemia (hipercolesterolemia/hipertrigliceridemia)
+04. Obesidad
+05. Sobrepeso
+06. Enfermedad renal crónica
+07. Insuficiencia cardiaca
+08. Cardiopatía isquémica (angina)
+09. Infarto agudo de miocardio (IAM)
+10. Fibrilación auricular
+11. Arritmias supraventriculares
+12. Enfermedad arterial periférica
+13. Accidente cerebrovascular (ictus)
+14. Ataque isquémico transitorio (AIT)
+15. Trombosis venosa profunda (TVP)
+16. Embolia pulmonar
+17. Asma
+18. EPOC (enfermedad pulmonar obstructiva crónica)
+19. Neumonía adquirida en la comunidad
+20. Bronquitis aguda
+21. Infección respiratoria alta (IRA alta)
+22. Resfriado común
+23. Gripe (influenza)
+24. COVID-19
+25. Sinusitis aguda
+26. Faringitis
+27. Amigdalitis
+28. Otitis media aguda
+29. Otitis externa
+30. Rinitis alérgica
+31. Conjuntivitis
+32. Gastroenteritis aguda
+33. Gastritis
+34. Reflujo gastroesofágico (ERGE)
+35. Úlcera péptica
+36. Síndrome del intestino irritable (SII)
+37. Enfermedad inflamatoria intestinal (Crohn/colitis ulcerosa)
+38. Estreñimiento funcional
+39. Diarrea aguda
+40. Colelitiasis (cálculos biliares)
+41. Colecistitis
+42. Pancreatitis aguda
+43. Hepatitis viral
+44. Hígado graso no alcohólico (EHGNA/NAFLD)
+45. Cirrosis
+46. Apendicitis
+47. Hernia inguinal
+48. Hemorroides
+49. Fisura anal
+50. Anemia ferropénica
+51. Anemia por enfermedad crónica
+52. Déficit de vitamina B12
+53. Déficit de folato
+54. Hipotiroidismo
+55. Hipertiroidismo
+56. Nódulos tiroideos
+57. Osteoporosis
+58. Osteoartrosis (artrosis)
+59. Artritis reumatoide
+60. Gota
+61. Lumbalgia mecánica
+62. Cervicalgia
+63. Tendinitis (p. ej., manguito rotador)
+64. Esguince de tobillo
+65. Fracturas frecuentes (radio distal, cadera en mayores)
+66. Fibromialgia
+67. Migraña
+68. Cefalea tensional
+69. Vértigo periférico (VPPB)
+70. Epilepsia
+71. Neuropatía periférica
+72. Radiculopatía (ciática)
+73. Depresión mayor
+74. Trastorno de ansiedad generalizada
+75. Trastorno de pánico
+76. Insomnio
+77. Trastorno por uso de alcohol
+78. Tabaquismo (trastorno por uso de nicotina)
+79. Demencia (Alzheimer y otras)
+80. Delirium (en contexto hospitalario)
+81. Infección urinaria (cistitis)
+82. Pielonefritis
+83. Litiasis renal (cólico nefrítico)
+84. Hiperplasia benigna de próstata (HBP)
+85. Prostatitis
+86. Disfunción eréctil
+87. Embarazo
+88. Preeclampsia
+89. Diabetes gestacional
+90. Vaginosis bacteriana
+91. Candidiasis vulvovaginal
+92. Enfermedad inflamatoria pélvica (EIP)
+93. Menopausia
+94. Dismenorrea
+95. Endometriosis
+96. Dermatitis atópica
+97. Dermatitis de contacto
+98. Urticaria
+99. Psoriasis
+100. Celulitis bacteriana (infección de piel y partes blandas)
+
+
+200 síntomas comunes (lista orientativa, no exhaustiva)
+======================================================
+
+001. Fiebre
+002. Febrícula
+003. Escalofríos
+004. Sudoración
+005. Sudoración nocturna
+006. Fatiga
+007. Astenia
+008. Debilidad
+009. Malestar general
+010. Pérdida de apetito (anorexia)
+011. Pérdida de peso involuntaria
+012. Aumento de peso
+013. Dolor
+014. Dolor generalizado
+015. Dolor de cabeza
+016. Cefalea frontal
+017. Cefalea occipital
+018. Migraña (dolor pulsátil)
+019. Fotofobia
+020. Fonofobia
+021. Mareo
+022. Vértigo
+023. Síncope (desmayo)
+024. Presíncope
+025. Aturdimiento
+026. Visión borrosa
+027. Diplopía (visión doble)
+028. Pérdida de visión
+029. Ojos rojos
+030. Dolor ocular
+031. Lagrimeo
+032. Sequedad ocular
+033. Secreción ocular
+034. Dolor de oído
+035. Otorragia (sangrado de oído)
+036. Otorrhea (secreción de oído)
+037. Hipoacusia (disminución de audición)
+038. Tinnitus (pitidos)
+039. Congestión nasal
+040. Rinorrea
+041. Rinorrea acuosa
+042. Rinorrea purulenta
+043. Estornudos
+044. Picor nasal
+045. Epistaxis (sangrado nasal)
+046. Dolor facial
+047. Presión/llenura facial
+048. Dolor de garganta
+049. Odinofagia (dolor al tragar)
+050. Disfagia (dificultad para tragar)
+051. Ronquera (disfonía)
+052. Afónica/pérdida de voz
+053. Tos
+054. Tos seca
+055. Tos productiva
+056. Expectoración
+057. Esputo con sangre (hemoptisis)
+058. Disnea (falta de aire)
+059. Disnea de esfuerzo
+060. Ortopnea
+061. Sibilancias
+062. Opresión torácica
+063. Dolor torácico
+064. Palpitaciones
+065. Taquicardia percibida
+066. Edema (hinchazón)
+067. Edema de piernas
+068. Cianosis
+069. Dolor abdominal
+070. Dolor epigástrico
+071. Dolor en hipocondrio derecho
+072. Dolor en fosa iliaca derecha
+073. Distensión abdominal
+074. Hinchazón abdominal
+075. Acidez/ardor
+076. Pirosis
+077. Reflujo/regurgitación
+078. Náuseas
+079. Vómitos
+080. Hematemesis (vómitos con sangre)
+081. Diarrea
+082. Diarrea acuosa
+083. Diarrea con moco
+084. Diarrea con sangre
+085. Estreñimiento
+086. Tenesmo (sensación de evacuación incompleta)
+087. Flatulencia
+088. Eructos
+089. Hipo
+090. Dolor rectal
+091. Prurito anal
+092. Sangrado rectal
+093. Melena (heces negras)
+094. Heces pálidas (acolia)
+095. Ictericia (piel/ojos amarillos)
+096. Prurito generalizado
+097. Sed excesiva (polidipsia)
+098. Hambre excesiva (polifagia)
+099. Aumento de micción (poliuria)
+100. Disuria (dolor al orinar)
+101. Urgencia urinaria
+102. Frecuencia urinaria
+103. Nicturia
+104. Hematuria (sangre en orina)
+105. Olor fuerte en orina
+106. Incontinencia urinaria
+107. Retención urinaria
+108. Dolor lumbar
+109. Dolor en flanco
+110. Dolor suprapúbico
+111. Secreción uretral
+112. Dolor testicular
+113. Dolor pélvico
+114. Flujo vaginal anormal
+115. Prurito vulvar
+116. Dolor vaginal
+117. Sangrado vaginal anormal
+118. Menorragia (sangrado abundante)
+119. Metrorragia (sangrado intermenstrual)
+120. Amenorrea (ausencia de regla)
+121. Dismenorrea (dolor menstrual)
+122. Dispareunia (dolor en relaciones)
+123. Sofocos
+124. Sudores
+125. Sequedad vaginal
+126. Dolor articular (artralgia)
+127. Dolor muscular (mialgia)
+128. Calambres
+129. Rigidez articular
+130. Inflamación articular
+131. Limitación de movilidad
+132. Dolor cervical
+133. Dolor de hombro
+134. Dolor de rodilla
+135. Dolor de cadera
+136. Dolor de muñeca
+137. Dolor de mano
+138. Dolor de pie
+139. Dolor de espalda
+140. Dolor ciático
+141. Hormigueo (parestesias)
+142. Entumecimiento
+143. Temblor
+144. Debilidad focal
+145. Dificultad para hablar (disartria)
+146. Afasia (dificultad de lenguaje)
+147. Confusión
+148. Somnolencia
+149. Insomnio
+150. Irritabilidad
+151. Ansiedad
+152. Nerviosismo
+153. Tristeza
+154. Anhedonia (pérdida de interés)
+155. Labilidad emocional
+156. Dificultad de concentración
+157. Pérdida de memoria
+158. Alucinaciones
+159. Convulsiones
+160. Erupción cutánea (rash)
+161. Enrojecimiento (eritema)
+162. Picor (prurito)
+163. Urticaria (habones)
+164. Lesiones tipo ampolla (vesículas)
+165. Pústulas
+166. Descamación
+167. Piel seca (xerosis)
+168. Hinchazón facial
+169. Edema de labios (angioedema)
+170. Dolor/ardor al tacto
+171. Heridas que no cicatrizan
+172. Moretones fáciles (equimosis)
+173. Palidez
+174. Sudor frío
+175. Intolerancia al frío
+176. Intolerancia al calor
+177. Caída de cabello (alopecia)
+178. Uñas frágiles
+179. Dolor dental
+180. Sensibilidad dental
+181. Sangrado de encías
+182. Mal aliento (halitosis)
+183. Dolor al masticar
+184. Úlceras bucales (aftas)
+185. Boca seca (xerostomía)
+186. Ganglios aumentados (adenopatías)
+187. Hinchazón de garganta
+188. Dolor al respirar (pleurítico)
+189. Dificultad para respirar al acostarse
+190. Intolerancia al ejercicio
+191. Calor/hinchazón en una pierna
+192. Dolor en pantorrilla
+193. Cambios de coloración en piel
+194. Lesiones pigmentadas nuevas
+195. Dolor en el pecho al esfuerzo
+196. Sensación de “nudo” en la garganta
+197. Sensación de falta de aire
+198. Sensación de mareo al levantarse
+199. Debilidad al subir escaleras
+200. Dolor localizado con presión
