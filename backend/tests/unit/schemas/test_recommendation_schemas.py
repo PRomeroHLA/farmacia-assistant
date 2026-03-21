@@ -91,3 +91,26 @@ def test_medication_to_product_recommendation_sets_stock_margin_and_match_label(
     assert dumped["recommendedFor"] == "Congestión nasal"
     assert dumped["commercialMargin"] == "6,50 €"
     assert dumped["stockUnits"] == "8"
+
+
+def test_medication_to_product_recommendation_respects_recommended_for_override():
+    case = StructuredCase(
+        age=40,
+        sex="Mujer",
+        is_pregnant=False,
+        symptoms=[Symptom(id="s1", label="Tos")],
+        hypotheses=[],
+    )
+    med = Medication(
+        id="med-x",
+        name="X",
+        category="C",
+        reason="R",
+        badge="main",
+        indicated_symptom_labels=("Tos",),
+        economic_margin=Decimal("1"),
+    )
+    dto = medication_to_product_recommendation(
+        med, case, recommended_for_override="Tos"
+    )
+    assert dto.recommended_for == "Tos"

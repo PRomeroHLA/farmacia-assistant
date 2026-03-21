@@ -1,4 +1,8 @@
-import type { StructuredCaseResponse, ProductRecommendation } from '../shared/types'
+import type {
+  StructuredCaseResponse,
+  ProductRecommendation,
+  RecommendationSymptomGroup,
+} from '../shared/types'
 
 const MOCK_DELAY_MS = 300
 
@@ -47,9 +51,46 @@ const mockProducts: ProductRecommendation[] = [
   },
 ]
 
+function withBadges(products: ProductRecommendation[]): ProductRecommendation[] {
+  return products.map((p, i) => ({
+    ...p,
+    badge: i === 0 ? ('main' as const) : ('alternative' as const),
+  }))
+}
+
+function sliceForSymptom(
+  label: string,
+  offset: number
+): ProductRecommendation[] {
+  const rotated = [
+    mockProducts[offset % mockProducts.length],
+    mockProducts[(offset + 1) % mockProducts.length],
+    mockProducts[(offset + 2) % mockProducts.length],
+  ]
+  return withBadges(
+    rotated.map((p) => ({
+      ...p,
+      recommendedFor: label,
+    }))
+  )
+}
+
 export async function getRecommendations(
-  _caseData: StructuredCaseResponse
-): Promise<ProductRecommendation[]> {
+  caseData: StructuredCaseResponse
+): Promise<RecommendationSymptomGroup[]> {
   await new Promise((resolve) => setTimeout(resolve, MOCK_DELAY_MS))
-  return [...mockProducts]
+
+  if (caseData.symptoms.length > 0) {
+    return caseData.symptoms.map((s, index) => ({
+      symptomLabel: s.label,
+      recommendations: sliceForSymptom(s.label, index),
+    }))
+  }
+
+  return [
+    {
+      symptomLabel: null,
+      recommendations: withBadges(mockProducts.map((p) => ({ ...p }))),
+    },
+  ]
 }

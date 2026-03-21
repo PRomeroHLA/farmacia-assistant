@@ -51,7 +51,7 @@ export function DashboardPage() {
 
   const {
     confirmed,
-    recommendations,
+    recommendationGroups,
     loadingRecommendations,
     recommendationsError,
     confirmCase,
@@ -94,7 +94,6 @@ export function DashboardPage() {
             </div>
             <div>
               <h1 className="text-emerald-500 font-semibold text-lg">Asistente Farmacéutico</h1>
-              <p className="text-sm text-gray-500">Sistema de recomendación de productos</p>
             </div>
           </div>
           {confirmed && (
@@ -187,24 +186,58 @@ export function DashboardPage() {
           </p>
         )}
 
-        {recommendations.length > 0 && (
+        {recommendationGroups.length > 0 && (
           <section
             id="recommendations"
             className="bg-white rounded-xl shadow-sm border border-gray-200 p-8"
             aria-label="Recomendaciones"
           >
-            <h2 className="text-left text-gray-800 mb-1">Productos recomendados</h2>
-            <p className="text-left text-sm text-gray-600 mb-6">
-              Basado en el caso validado y disponibilidad en stock
-            </p>
+            <h2 className="text-left text-gray-800 mb-6">Productos recomendados</h2>
 
-            <ul className="space-y-4" aria-label="Lista de productos recomendados">
-              {recommendations.map((product) => (
-                <li key={product.id}>
-                  <RecommendationCard product={product} />
-                </li>
+            <div className="space-y-10">
+              {recommendationGroups.map((group, groupIndex) => (
+                <div
+                  key={
+                    group.symptomLabel != null
+                      ? `${group.symptomLabel}-${groupIndex}`
+                      : `group-${groupIndex}`
+                  }
+                  className={groupIndex > 0 ? 'border-t border-gray-100 pt-8' : ''}
+                >
+                  {group.symptomLabel != null && group.symptomLabel !== '' ? (
+                    <h3
+                      id={`recommendations-symptom-${groupIndex}`}
+                      className="text-lg font-semibold text-emerald-600 mb-4"
+                    >
+                      {group.symptomLabel}
+                    </h3>
+                  ) : (
+                    <h3
+                      id={`recommendations-symptom-${groupIndex}`}
+                      className="text-lg font-semibold text-emerald-600 mb-4"
+                    >
+                      Recomendaciones generales
+                    </h3>
+                  )}
+                  {group.recommendations.length === 0 ? (
+                    <p className="text-sm text-gray-500">
+                      No hay productos en catálogo para este síntoma con el caso confirmado.
+                    </p>
+                  ) : (
+                    <ul
+                      className="space-y-4"
+                      aria-labelledby={`recommendations-symptom-${groupIndex}`}
+                    >
+                      {group.recommendations.map((product, productIndex) => (
+                        <li key={`${groupIndex}-${product.id}-${productIndex}`}>
+                          <RecommendationCard product={product} />
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               ))}
-            </ul>
+            </div>
           </section>
         )}
       </main>

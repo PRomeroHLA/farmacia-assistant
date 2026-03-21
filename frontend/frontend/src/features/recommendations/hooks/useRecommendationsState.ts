@@ -1,13 +1,18 @@
 import { useState, useCallback } from 'react'
 import { getRecommendations } from '../../../api/recommendations'
-import type { StructuredCaseResponse, ProductRecommendation } from '../../../shared/types'
+import type {
+  StructuredCaseResponse,
+  RecommendationSymptomGroup,
+} from '../../../shared/types'
 
 const RECOMMENDATIONS_ERROR_MESSAGE =
   'No se han podido cargar las recomendaciones.'
 
 export function useRecommendationsState() {
   const [confirmed, setConfirmed] = useState(false)
-  const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([])
+  const [recommendationGroups, setRecommendationGroups] = useState<
+    RecommendationSymptomGroup[]
+  >([])
   const [loadingRecommendations, setLoadingRecommendations] = useState(false)
   const [recommendationsError, setRecommendationsError] = useState<string | null>(null)
 
@@ -16,8 +21,8 @@ export function useRecommendationsState() {
     setLoadingRecommendations(true)
     setRecommendationsError(null)
     try {
-      const list = await getRecommendations(caseData)
-      setRecommendations(list)
+      const groups = await getRecommendations(caseData)
+      setRecommendationGroups(groups)
       setLoadingRecommendations(false)
       setTimeout(() => {
         const el = document.getElementById('recommendations')
@@ -33,14 +38,14 @@ export function useRecommendationsState() {
 
   const reset = useCallback(() => {
     setConfirmed(false)
-    setRecommendations([])
+    setRecommendationGroups([])
     setLoadingRecommendations(false)
     setRecommendationsError(null)
   }, [])
 
   return {
     confirmed,
-    recommendations,
+    recommendationGroups,
     loadingRecommendations,
     recommendationsError,
     confirmCase,

@@ -12,7 +12,7 @@ from app.interfaces.api.schemas.case import (
     structured_case_to_response,
 )
 from app.interfaces.api.schemas.recommendation import (
-    ProductRecommendation,
+    RecommendationSymptomGroup,
     RecommendationsResponse,
     medication_to_product_recommendation,
 )
@@ -55,9 +55,22 @@ async def get_recommendations(
 ) -> RecommendationsResponse:
     """Recibe el caso clínico confirmado y devuelve recomendaciones (lista + explicación). La explicación es fija por ahora (video-08: LLM)."""
     case = request_body_to_structured_case(body)
-    medications = await recommendations_use_case.run(case)
-    recommendations = [medication_to_product_recommendation(m, case) for m in medications]
+    group_results = await recommendations_use_case.run(case)
+    groups = [
+        RecommendationSymptomGroup(
+            symptom_label=g.symptom_label,
+            recommendations=[
+                medication_to_product_recommendation(
+                    m,
+                    case,
+                    recommended_for_override=g.symptom_label,
+                )
+                for m in g.medications
+            ],
+        )
+        for g in group_results
+    ]
     return RecommendationsResponse(
-        recommendations=recommendations,
+        groups=groups,
         explanation=RECOMMENDATIONS_EXPLANATION_PLACEHOLDER,
     )

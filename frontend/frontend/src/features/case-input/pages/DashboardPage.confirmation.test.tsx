@@ -56,11 +56,16 @@ describe('DashboardPage – confirmation section', () => {
 
     mockGetRecommendations.mockResolvedValue([
       {
-        id: '1',
-        name: 'Producto principal',
-        category: 'Categoría',
-        reason: 'Razón',
-        badge: 'main',
+        symptomLabel: 'Dolor',
+        recommendations: [
+          {
+            id: '1',
+            name: 'Producto principal',
+            category: 'Categoría',
+            reason: 'Razón',
+            badge: 'main',
+          },
+        ],
       },
     ])
 
@@ -84,7 +89,12 @@ describe('DashboardPage – Nuevo caso', () => {
   it('resets to initial state when "Nuevo caso" is clicked after confirmed case with recommendations', async () => {
     mockAnalyzeCase.mockResolvedValue(structuredCaseResponse)
     mockGetRecommendations.mockResolvedValue([
-      { id: '1', name: 'Producto', category: 'Cat', reason: 'Razón', badge: 'main' },
+      {
+        symptomLabel: 'Dolor',
+        recommendations: [
+          { id: '1', name: 'Producto', category: 'Cat', reason: 'Razón', badge: 'main' },
+        ],
+      },
     ])
     const user = userEvent.setup()
     render(<DashboardPage />)

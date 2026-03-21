@@ -11,24 +11,30 @@ const validCaseData: StructuredCaseResponse = {
 }
 
 describe('getRecommendations mock', () => {
-  it('returns at least one recommendation with badge "main" given valid StructuredCaseResponse', async () => {
-    const result = await getRecommendations(validCaseData)
-    const main = result.filter((r) => r.badge === 'main')
-    expect(main.length).toBeGreaterThanOrEqual(1)
+  it('returns one group per symptom with at least one main badge', async () => {
+    const groups = await getRecommendations(validCaseData)
+    expect(groups.length).toBe(1)
+    const mains = groups[0].recommendations.filter((r) => r.badge === 'main')
+    expect(mains.length).toBeGreaterThanOrEqual(1)
   })
 
-  it('remaining recommendations can be badge "alternative"', async () => {
-    const result = await getRecommendations(validCaseData)
-    const badges = result.map((r) => r.badge)
-    expect(badges.every((b) => b === 'main' || b === 'alternative')).toBe(true)
+  it('recommendation badges are main or alternative', async () => {
+    const groups = await getRecommendations(validCaseData)
+    for (const g of groups) {
+      for (const r of g.recommendations) {
+        expect(r.badge === 'main' || r.badge === 'alternative').toBe(true)
+      }
+    }
   })
 
   it('name, category and reason are not empty', async () => {
-    const result = await getRecommendations(validCaseData)
-    for (const r of result) {
-      expect(r.name.trim()).not.toBe('')
-      expect(r.category.trim()).not.toBe('')
-      expect(r.reason.trim()).not.toBe('')
+    const groups = await getRecommendations(validCaseData)
+    for (const g of groups) {
+      for (const r of g.recommendations) {
+        expect(r.name.trim()).not.toBe('')
+        expect(r.category.trim()).not.toBe('')
+        expect(r.reason.trim()).not.toBe('')
+      }
     }
   })
 })

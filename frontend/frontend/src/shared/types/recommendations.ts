@@ -22,7 +22,13 @@ export interface ProductRecommendation {
   stockUnits?: string
 }
 
+/** Grupo de recomendaciones por síntoma (orden del caso confirmado). */
+export interface RecommendationSymptomGroup {
+  symptomLabel: string | null
+  recommendations: ProductRecommendation[]
+}
+
 /** Contrato del servicio de recomendaciones. Firma estable para mock y HTTP. */
 export type GetRecommendationsFn = (
   caseData: StructuredCaseResponse
-) => Promise<ProductRecommendation[]>
+) => Promise<RecommendationSymptomGroup[]>

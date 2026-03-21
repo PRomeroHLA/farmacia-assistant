@@ -21,4 +21,8 @@ export type {
   AnalyzeCaseRequest,
 } from './clinical';
 
-export type { ProductRecommendation, GetRecommendationsFn } from './recommendations';
+export type {
+  ProductRecommendation,
+  RecommendationSymptomGroup,
+  GetRecommendationsFn,
+} from './recommendations';

@@ -27,12 +27,21 @@ class ProductRecommendation(BaseModel):
     stock_units: str | None = Field(default=None, serialization_alias="stockUnits")
 
 
-class RecommendationsResponse(BaseModel):
-    """Respuesta del endpoint de recomendaciones: lista de productos y texto explicativo."""
+class RecommendationSymptomGroup(BaseModel):
+    """Bloque de recomendaciones por síntoma (orden del caso); dentro, productos por margen desc."""
 
     model_config = ConfigDict(populate_by_name=True)
 
+    symptom_label: str | None = Field(default=None, serialization_alias="symptomLabel")
     recommendations: list[ProductRecommendation]
+
+
+class RecommendationsResponse(BaseModel):
+    """Respuesta del endpoint: grupos por síntoma (3 productos/síntoma) + explicación."""
+
+    model_config = ConfigDict(populate_by_name=True)
+
+    groups: list[RecommendationSymptomGroup]
     explanation: str
 
 
@@ -69,11 +78,19 @@ def _format_commercial_margin(value: Decimal) -> str:
 
 
 def medication_to_product_recommendation(
-    medication: Medication, case: StructuredCase
+    medication: Medication,
+    case: StructuredCase,
+    *,
+    recommended_for_override: str | None = None,
 ) -> ProductRecommendation:
     """Convierte Medication + caso confirmado al DTO de API (incluye etiqueta clínica y margen)."""
     stock_status, stock_units = _stock_fields_for_api(medication)
     margin_str = _format_commercial_margin(medication.economic_margin)
+    rf = (
+        matching_recommendation_label(case, medication)
+        if recommended_for_override is None
+        else recommended_for_override
+    )
     return ProductRecommendation(
         id=medication.id,
         name=medication.name,
@@ -83,7 +100,7 @@ def medication_to_product_recommendation(
         price=medication.price,
         stock=stock_status,
         format=medication.format,
-        recommended_for=matching_recommendation_label(case, medication),
+        recommended_for=rf,
         commercial_margin=margin_str,
         stock_units=stock_units,
     )

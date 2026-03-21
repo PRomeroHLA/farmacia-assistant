@@ -17,8 +17,13 @@ vi.mock('../../api/caseAnalysis', () => ({
 
 vi.mock('../../api/recommendations', () => ({
   getRecommendations: vi.fn().mockResolvedValue([
-    { id: '1', name: 'Producto A', category: 'Cat', reason: 'Razón', badge: 'main' as const },
-    { id: '2', name: 'Producto B', category: 'Cat', reason: 'Razón', badge: 'alternative' as const },
+    {
+      symptomLabel: 'Dolor de garganta',
+      recommendations: [
+        { id: '1', name: 'Producto A', category: 'Cat', reason: 'Razón', badge: 'main' as const },
+        { id: '2', name: 'Producto B', category: 'Cat', reason: 'Razón', badge: 'alternative' as const },
+      ],
+    },
   ]),
 }))
 

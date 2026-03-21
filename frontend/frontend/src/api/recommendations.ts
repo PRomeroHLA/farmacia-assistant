@@ -1,7 +1,10 @@
 import { hasApiBaseUrl } from './config'
 import { getRecommendationsFromApi } from './recommendations.api'
 import { getRecommendations as getRecommendationsMock } from './recommendations.mock'
-import type { StructuredCaseResponse, ProductRecommendation } from '../shared/types'
+import type {
+  StructuredCaseResponse,
+  RecommendationSymptomGroup,
+} from '../shared/types'
 
 const isTestEnv = import.meta.env.MODE === 'test'
 
@@ -10,7 +13,7 @@ const isTestEnv = import.meta.env.MODE === 'test'
  */
 export async function getRecommendations(
   caseData: StructuredCaseResponse
-): Promise<ProductRecommendation[]> {
+): Promise<RecommendationSymptomGroup[]> {
   // En tests siempre usamos el mock, aunque haya API base configurada.
   if (!isTestEnv && hasApiBaseUrl()) {
     return getRecommendationsFromApi(caseData)

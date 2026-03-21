@@ -10,6 +10,7 @@ from app.interfaces.api.schemas.case import (
 )
 from app.interfaces.api.schemas.recommendation import (
     ProductRecommendation,
+    RecommendationSymptomGroup,
     RecommendationsResponse,
     medication_to_product_recommendation,
 )
@@ -24,6 +25,7 @@ __all__ = [
     "AnalyzeCaseRequest",
     "request_body_to_structured_case",
     "ProductRecommendation",
+    "RecommendationSymptomGroup",
     "RecommendationsResponse",
     "medication_to_product_recommendation",
 ]
