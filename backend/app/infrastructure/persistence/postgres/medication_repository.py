@@ -41,6 +41,7 @@ def _row_to_medication(model: MedicationModel, quantity: int | None) -> Medicati
         badge="alternative",  # El caso de uso asigna main/alternative en la salida
         price=model.price,
         stock=_stock_label(quantity),
+        stock_quantity=quantity,
         format=model.format,
         age_min=model.age_min,
         age_max=model.age_max,

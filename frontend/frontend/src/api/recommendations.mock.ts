@@ -13,6 +13,9 @@ const mockProducts: ProductRecommendation[] = [
     price: '7.95€',
     stock: 'En stock',
     format: 'Pastillas',
+    recommendedFor: 'Dolor de garganta',
+    commercialMargin: '2,10 €',
+    stockUnits: '63',
   },
   {
     id: '2',
@@ -24,6 +27,9 @@ const mockProducts: ProductRecommendation[] = [
     price: '9.50€',
     stock: 'En stock',
     format: 'Spray 30ml',
+    recommendedFor: 'Odinofagia (dolor al tragar)',
+    commercialMargin: '1,85 €',
+    stockUnits: '22',
   },
   {
     id: '3',
@@ -35,6 +41,9 @@ const mockProducts: ProductRecommendation[] = [
     price: '12.95€',
     stock: 'Pocas unidades',
     format: 'Jarabe 150ml',
+    recommendedFor: 'Tos seca',
+    commercialMargin: '3,20 €',
+    stockUnits: '4',
   },
 ]
 

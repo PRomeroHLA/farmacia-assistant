@@ -43,23 +43,44 @@ describe('RecommendationCard', () => {
     expect(screen.getByText('Alternativa')).toBeInTheDocument()
   })
 
-  it('renders price, stock and format when provided', () => {
+  it('renders labeled price, margin, stock, units and format when provided', () => {
     const withMeta: ProductRecommendation = {
       ...baseProduct,
       price: '5.99€',
+      commercialMargin: '1,30 €',
       stock: 'En stock',
+      stockUnits: '24',
       format: '20 comprimidos',
     }
     render(<RecommendationCard product={withMeta} />)
+    expect(screen.getByText('Precio')).toBeInTheDocument()
     expect(screen.getByText('5.99€')).toBeInTheDocument()
+    expect(screen.getByText('Margen')).toBeInTheDocument()
+    expect(screen.getByText('1,30 €')).toBeInTheDocument()
+    expect(screen.getByText('Stock')).toBeInTheDocument()
     expect(screen.getByText('En stock')).toBeInTheDocument()
+    expect(screen.getByText('Unidades')).toBeInTheDocument()
+    expect(screen.getByText('24')).toBeInTheDocument()
+    expect(screen.getByText('Formato')).toBeInTheDocument()
     expect(screen.getByText('20 comprimidos')).toBeInTheDocument()
   })
 
-  it('does not render price/stock/format when omitted', () => {
+  it('does not render meta footer when price/stock/format/margin/units omitted', () => {
     render(<RecommendationCard product={baseProduct} />)
-    expect(screen.queryByText(/€/)).not.toBeInTheDocument()
-    expect(screen.queryByText('En stock')).not.toBeInTheDocument()
+    expect(screen.queryByText('Precio')).not.toBeInTheDocument()
+    expect(screen.queryByText('Stock')).not.toBeInTheDocument()
+  })
+
+  it('shows recommended-for block when recommendedFor is set', () => {
+    const p: ProductRecommendation = {
+      ...baseProduct,
+      recommendedFor: 'Congestión nasal y rinorrea',
+    }
+    render(<RecommendationCard product={p} />)
+    expect(screen.getByText('Recomendado para')).toBeInTheDocument()
+    expect(
+      screen.getByText('Congestión nasal y rinorrea')
+    ).toBeInTheDocument()
   })
 
   it('applies distinct stock style for "En stock" vs "Pocas unidades"', () => {

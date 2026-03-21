@@ -22,7 +22,7 @@ export function CaseDescriptionSection({
 }: CaseDescriptionSectionProps) {
   return (
     <section className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 mb-6">
-      <h2 className="text-left text-gray-800 mb-2">
+      <h2 className="text-left text-emerald-500 font-semibold mb-2">
         Descripción del caso del cliente
       </h2>
       <p className="text-left text-sm text-gray-600 mb-6">

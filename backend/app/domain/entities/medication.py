@@ -13,7 +13,8 @@ class Medication:
     reason: str
     badge: Literal["main", "alternative"]
     price: str | None = None
-    stock: str | None = None
+    stock: str | None = None  # estado textual o cantidad como string en catálogo in-memory
+    stock_quantity: int | None = None  # unidades en almacén (p. ej. PostgreSQL)
     format: str | None = None  # noqa: A003
     # Campos para reglas de coincidencia y margen (motor de recomendaciones, video-05)
     age_min: int | None = None

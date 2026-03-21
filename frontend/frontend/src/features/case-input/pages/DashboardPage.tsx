@@ -93,7 +93,7 @@ export function DashboardPage() {
               </svg>
             </div>
             <div>
-              <h1 className="text-gray-900 font-semibold text-lg">Asistente Farmacéutico</h1>
+              <h1 className="text-emerald-500 font-semibold text-lg">Asistente Farmacéutico</h1>
               <p className="text-sm text-gray-500">Sistema de recomendación de productos</p>
             </div>
           </div>

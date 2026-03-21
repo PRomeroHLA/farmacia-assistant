@@ -8,7 +8,10 @@ from app.domain.entities import (
     StructuredCase,
     Symptom,
 )
-from app.domain.services.recommendation_rules import medication_matches_case
+from app.domain.services.recommendation_rules import (
+    matching_recommendation_label,
+    medication_matches_case,
+)
 
 
 def _med(**kwargs) -> Medication:
@@ -204,3 +207,37 @@ def test_one_criterion_fails_no_match():
     med = _med(age_min=18, age_max=65, allowed_sexes=("Hombre",))
     case = _case(age=30, sex="Mujer")  # sex no coincide
     assert medication_matches_case(med, case) is False
+
+
+def test_matching_recommendation_label_prefers_first_case_symptom_when_indicated():
+    """Devuelve el primer síntoma del caso que el medicamento indica."""
+    med = _med(indicated_symptom_labels=("Congestión nasal", "Rinorrea"))
+    case = _case(
+        symptoms=[
+            Symptom(id="s1", label="Fiebre"),
+            Symptom(id="s2", label="Congestión nasal"),
+        ],
+    )
+    assert matching_recommendation_label(case, med) == "Congestión nasal"
+
+
+def test_matching_recommendation_label_falls_back_to_hypothesis():
+    """Sin síntomas coincidentes, usa la primera hipótesis del caso indicada por el medicamento."""
+    med = _med(
+        indicated_symptom_labels=(),
+        indicated_hypothesis_labels=("Resfriado común",),
+    )
+    case = _case(
+        symptoms=[Symptom(id="s1", label="Otro")],
+        hypotheses=[
+            ClinicalHypothesis(id="h1", label="Gripe"),
+            ClinicalHypothesis(id="h2", label="Resfriado común"),
+        ],
+    )
+    assert matching_recommendation_label(case, med) == "Resfriado común"
+
+
+def test_matching_recommendation_label_returns_none_when_no_overlap():
+    med = _med(indicated_symptom_labels=("Tos",))
+    case = _case(symptoms=[Symptom(id="s1", label="Fiebre")], hypotheses=[])
+    assert matching_recommendation_label(case, med) is None

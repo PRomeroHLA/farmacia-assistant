@@ -11,8 +11,15 @@ export interface ProductRecommendation {
   reason: string
   badge: 'main' | 'alternative'
   price?: string
+  /** Estado de disponibilidad (p. ej. En stock). */
   stock?: string
   format?: string
+  /** Síntoma o hipótesis del caso por la que se recomienda (API: recommendedFor). */
+  recommendedFor?: string
+  /** Margen comercial formateado (API: commercialMargin). */
+  commercialMargin?: string
+  /** Unidades disponibles en almacén (API: stockUnits). */
+  stockUnits?: string
 }
 
 /** Contrato del servicio de recomendaciones. Firma estable para mock y HTTP. */

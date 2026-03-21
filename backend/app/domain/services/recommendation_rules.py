@@ -31,3 +31,21 @@ def medication_matches_case(medication: Medication, case: StructuredCase) -> boo
             return False
 
     return True
+
+
+def matching_recommendation_label(case: StructuredCase, medication: Medication) -> str | None:
+    """Primera etiqueta del caso (síntoma u hipótesis) por la que el medicamento está indicado.
+
+    Prioriza síntomas en el orden del caso; si no hay coincidencia, hipótesis en el mismo orden.
+    """
+    if case.symptoms:
+        indicated = set(medication.indicated_symptom_labels)
+        for s in case.symptoms:
+            if s.label in indicated:
+                return s.label
+    if case.hypotheses:
+        indicated_h = set(medication.indicated_hypothesis_labels)
+        for h in case.hypotheses:
+            if h.label in indicated_h:
+                return h.label
+    return None

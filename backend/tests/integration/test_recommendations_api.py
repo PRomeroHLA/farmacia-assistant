@@ -29,6 +29,12 @@ def test_recommendations_valid_case_returns_200_and_recommendations_response(cli
         assert "category" in item
         assert "reason" in item
         assert "badge" in item
+        assert "recommendedFor" in item
+        assert "commercialMargin" in item
+        assert "stockUnits" in item
+        assert item["recommendedFor"]
+        assert item["commercialMargin"]
+        assert item["stockUnits"]
     assert isinstance(data["explanation"], str)
     assert len(data["explanation"]) > 0
 

@@ -1,9 +1,15 @@
 """Tests de contrato para schemas de recomendaciones. Alineados con frontend recommendations.ts."""
 
+from decimal import Decimal
+
 import pytest
 from pydantic import ValidationError
 
-from app.interfaces.api.schemas.recommendation import ProductRecommendation
+from app.domain.entities import ClinicalHypothesis, Medication, StructuredCase, Symptom
+from app.interfaces.api.schemas.recommendation import (
+    ProductRecommendation,
+    medication_to_product_recommendation,
+)
 
 
 def test_product_recommendation_has_required_fields():
@@ -53,3 +59,35 @@ def test_product_recommendation_badge_only_main_or_alternative():
         ProductRecommendation(
             id="x", name="X", category="Y", reason="Z", badge="invalid",
         )
+
+
+def test_medication_to_product_recommendation_sets_stock_margin_and_match_label():
+    case = StructuredCase(
+        age=40,
+        sex="Mujer",
+        is_pregnant=False,
+        symptoms=[Symptom(id="s1", label="Congestión nasal")],
+        hypotheses=[ClinicalHypothesis(id="h1", label="Resfriado común")],
+    )
+    med = Medication(
+        id="med-x",
+        name="Inhalador",
+        category="Dispositivo",
+        reason="Alivio nasal",
+        badge="main",
+        price="18.90€",
+        stock="8",
+        format="1 unidad",
+        indicated_symptom_labels=("Congestión nasal", "Rinorrea"),
+        indicated_hypothesis_labels=("Resfriado común",),
+        economic_margin=Decimal("6.50"),
+    )
+    dto = medication_to_product_recommendation(med, case)
+    assert dto.recommended_for == "Congestión nasal"
+    assert dto.commercial_margin == "6,50 €"
+    assert dto.stock == "En stock"
+    assert dto.stock_units == "8"
+    dumped = dto.model_dump(mode="json", by_alias=True)
+    assert dumped["recommendedFor"] == "Congestión nasal"
+    assert dumped["commercialMargin"] == "6,50 €"
+    assert dumped["stockUnits"] == "8"
