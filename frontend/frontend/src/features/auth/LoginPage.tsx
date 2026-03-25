@@ -3,15 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/useAuth'
 
 export function LoginPage() {
-  const { login, error } = useAuth()
+  const { login, error, loading } = useAuth()
   const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
-    await login(username, password)
-    if (!error) {
+    const success = await login(username, password)
+    if (success) {
       navigate('/dashboard')
     }
   }
@@ -71,9 +71,10 @@ export function LoginPage() {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-lg transition-colors duration-200 mt-6"
             >
-              Iniciar sesión
+              {loading ? 'Iniciando...' : 'Iniciar sesión'}
             </button>
 
             {error ? (

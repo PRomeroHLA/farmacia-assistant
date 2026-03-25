@@ -18,17 +18,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
     async (username: string, password: string) => {
       setLoading(true)
       setError(null)
+      try {
+        const result = await authLogin(username, password)
 
-      const result = await authLogin(username, password)
+        if (result && result.user) {
+          setUser(result.user)
+          return true
+        }
 
-      if (result && result.user) {
-        setUser(result.user)
-      } else {
         setUser(null)
-        setError('Invalid credentials')
+        setError('Credenciales inválidas')
+        return false
+      } catch {
+        setUser(null)
+        setError('No se pudo iniciar sesión. Revisa la conexión y la URL del backend.')
+        return false
+      } finally {
+        setLoading(false)
       }
-
-      setLoading(false)
     },
     []
   )
