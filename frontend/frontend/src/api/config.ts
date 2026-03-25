@@ -4,9 +4,13 @@
  */
 const DEFAULT_API_BASE_URL = "http://localhost:8000"
 
+function normalizeApiBaseUrl(url: string): string {
+  return url.replace(/\/+$/, '')
+}
+
 export function getApiBaseUrl(): string {
   const url = import.meta.env.VITE_API_BASE_URL
-  return url !== undefined && url !== "" ? url : DEFAULT_API_BASE_URL
+  return url !== undefined && url !== "" ? normalizeApiBaseUrl(url) : DEFAULT_API_BASE_URL
 }
 
 /**
