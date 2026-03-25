@@ -1,29 +1,11 @@
-import type { StructuredCaseResponse } from '../../../shared/types'
 import { useCaseInputState } from '../hooks/useCaseInputState'
 import { useRecommendationsState } from '../../recommendations'
 import { CaseDescriptionSection } from '../components/CaseDescriptionSection'
 import { PatientDataSection } from '../components/PatientDataSection'
-import type { PatientDataValue } from '../components/PatientDataSection'
 import { SymptomsSection } from '../components/SymptomsSection'
 import { HypothesesSection } from '../components/HypothesesSection'
 import { RecommendationCard } from '../../recommendations'
-
-function buildCaseForRecommendations(
-  patientData: PatientDataValue,
-  symptoms: StructuredCaseResponse['symptoms'],
-  hypotheses: StructuredCaseResponse['hypotheses']
-): StructuredCaseResponse {
-  const ageStr = patientData.age.trim()
-  const age = ageStr === '' ? null : parseInt(ageStr, 10)
-  const ageValid = age !== null && !Number.isNaN(age) ? age : null
-  return {
-    age: ageValid,
-    sex: patientData.sex,
-    isPregnant: patientData.isPregnant,
-    symptoms,
-    hypotheses,
-  }
-}
+import { buildCaseForRecommendations } from '../utils/buildCaseForRecommendations'
 
 export function DashboardPage() {
   const caseInput = useCaseInputState()
@@ -68,7 +50,13 @@ export function DashboardPage() {
 
   const handleConfirmCase = () => {
     if (structuredCase !== null && patientData !== null) {
-      const caseData = buildCaseForRecommendations(patientData, symptoms, hypotheses)
+      const caseData = buildCaseForRecommendations(
+        patientData,
+        symptoms,
+        hypotheses,
+        selectedSymptomIds,
+        selectedHypothesisIds
+      )
       confirmCase(caseData)
     }
   }
