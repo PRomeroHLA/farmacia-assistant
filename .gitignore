@@ -60,9 +60,11 @@ backend/.mypy_cache/
 backend/.ruff_cache/
 *.egg
 
-# Docs
-docs/
-
 # Misc
 *.bak
 *.tmp
+
+# Docs excluded from git
+docs/back/
+docs/front/
+docs/Integración/
